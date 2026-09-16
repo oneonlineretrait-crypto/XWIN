@@ -5,7 +5,7 @@ import { supabase } from './supabase'
 type AuthContextValue = {
   session: Session | null
   loading: boolean
-  signUp: (email: string, password: string) => Promise<{ error: string | null }>
+  signUp: (email: string, password: string, meta?: { first_name?: string; last_name?: string }) => Promise<{ error: string | null }>
   signIn: (email: string, password: string) => Promise<{ error: string | null }>
   signOut: () => Promise<void>
 }
@@ -25,8 +25,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => listener.subscription.unsubscribe()
   }, [])
 
-  async function signUp(email: string, password: string) {
-    const { error } = await supabase.auth.signUp({ email, password })
+  async function signUp(email: string, password: string, meta?: { first_name?: string; last_name?: string }) {
+    const { error } = await supabase.auth.signUp({ email, password, options: { data: meta } })
     return { error: error?.message ?? null }
   }
 

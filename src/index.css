@@ -4,3 +4,7 @@
 
 html { color-scheme: dark; }
 body { @apply bg-ink text-paper font-body antialiased; }
+
+.xwin-radial-bg {
+  background: radial-gradient(circle at 50% 35%, #151b26 0%, #0a0d13 55%, #05070a 100%);
+}

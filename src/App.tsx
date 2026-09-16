@@ -1,8 +1,8 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './lib/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
-import { Login } from './pages/Login'
-import { Signup } from './pages/Signup'
+import { Splash } from './pages/Splash'
+import { Auth } from './pages/Auth'
 import { Pronostics } from './pages/Pronostics'
 import { Montantes } from './pages/Montantes'
 import { Produits } from './pages/Produits'
@@ -15,8 +15,8 @@ export default function App() {
     <AuthProvider>
       <BrowserRouter>
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/inscription" element={<Signup />} />
+          <Route path="/" element={<Splash />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="/paiement/succes" element={<PaiementSucces />} />
           <Route path="/paiement/annule" element={<PaiementAnnule />} />
 
@@ -24,8 +24,6 @@ export default function App() {
           <Route path="/montantes" element={<ProtectedRoute><Montantes /></ProtectedRoute>} />
           <Route path="/produits" element={<ProtectedRoute><Produits /></ProtectedRoute>} />
           <Route path="/abonnement" element={<ProtectedRoute><Abonnement /></ProtectedRoute>} />
-
-          <Route path="/" element={<Navigate to="/pronostics" replace />} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

@@ -7,6 +7,6 @@ export function ProtectedRoute({ children }: { children: ReactNode }) {
   if (loading) {
     return <div className="min-h-screen flex items-center justify-center text-paper/50">Chargement…</div>
   }
-  if (!session) return <Navigate to="/login" replace />
+  if (!session) return <Navigate to="/auth" replace />
   return <>{children}</>
 }
