@@ -6,6 +6,7 @@ const links = [
   { to: '/montantes', label: 'Montantes' },
   { to: '/produits', label: 'Stratégies & formations' },
   { to: '/abonnement', label: 'VIP' },
+  { to: '/profil', label: 'Mon profil' },
 ]
 
 export function NavBar() {

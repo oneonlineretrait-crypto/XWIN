@@ -1,0 +1,175 @@
+import { useEffect, useState } from 'react'
+import { NavBar } from '../components/NavBar'
+import { useAuth } from '../lib/AuthContext'
+import { useProfile } from '../lib/useProfile'
+import { supabase } from '../lib/supabase'
+
+type Purchase = {
+  id: string
+  item_type: 'pronostic' | 'montante' | 'product' | 'subscription'
+  amount: number
+  payment_status: 'pending' | 'paid' | 'failed' | 'refunded'
+  created_at: string
+}
+
+const itemTypeLabels: Record<Purchase['item_type'], string> = {
+  pronostic: 'Pronostic',
+  montante: 'Montante',
+  product: 'Stratégie / formation',
+  subscription: 'Abonnement VIP',
+}
+
+const statusLabels: Record<Purchase['payment_status'], string> = {
+  paid: 'Payé',
+  pending: 'En attente',
+  failed: 'Échoué',
+  refunded: 'Remboursé',
+}
+
+export function Profil() {
+  const { session } = useAuth()
+  const { profile, refreshProfile } = useProfile()
+  const [displayName, setDisplayName] = useState('')
+  const [saving, setSaving] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [purchases, setPurchases] = useState<Purchase[]>([])
+  const [loadingPurchases, setLoadingPurchases] = useState(true)
+
+  useEffect(() => {
+    if (profile?.display_name) setDisplayName(profile.display_name)
+  }, [profile?.display_name])
+
+  useEffect(() => {
+    if (!session) return
+    supabase
+      .from('purchases')
+      .select('id, item_type, amount, payment_status, created_at')
+      .eq('user_id', session.user.id)
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        setPurchases((data as Purchase[]) ?? [])
+        setLoadingPurchases(false)
+      })
+  }, [session])
+
+  async function handleSave() {
+    if (!session) return
+    setSaving(true)
+    setSaved(false)
+    const { error } = await supabase
+      .from('profiles')
+      .update({ display_name: displayName.trim() || null })
+      .eq('id', session.user.id)
+    setSaving(false)
+    if (!error) {
+      setSaved(true)
+      refreshProfile()
+      setTimeout(() => setSaved(false), 2000)
+    }
+  }
+
+  const isVip = profile?.subscription_status === 'vip'
+
+  return (
+    <div className="min-h-screen">
+      <NavBar />
+      <main className="px-6 py-10 max-w-3xl mx-auto space-y-10">
+        <h1 className="font-display text-3xl">Mon profil</h1>
+
+        <section className="border border-white/10 rounded-lg p-5 space-y-4">
+          <h2 className="font-medium text-lg">Informations du compte</h2>
+
+          <div>
+            <label className="block text-sm text-paper/60 mb-1">Email</label>
+            <p className="text-paper/90">{session?.user.email}</p>
+          </div>
+
+          <div>
+            <label htmlFor="display_name" className="block text-sm text-paper/60 mb-1">
+              Pseudo
+            </label>
+            <div className="flex gap-2">
+              <input
+                id="display_name"
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Ton pseudo"
+                className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-signal"
+              />
+              <button
+                onClick={handleSave}
+                disabled={saving}
+                className="bg-signal text-white px-4 py-2 rounded-md text-sm hover:bg-signal/90 disabled:opacity-50"
+              >
+                {saving ? 'Enregistrement…' : saved ? 'Enregistré ✓' : 'Enregistrer'}
+              </button>
+            </div>
+          </div>
+
+          <div>
+            <label className="block text-sm text-paper/60 mb-1">Statut</label>
+            {isVip ? (
+              <p className="text-signal font-medium">
+                VIP — actif jusqu'au{' '}
+                {profile?.subscription_expires_at
+                  ? new Date(profile.subscription_expires_at).toLocaleDateString('fr-FR')
+                  : '—'}
+              </p>
+            ) : (
+              <p className="text-paper/70">
+                Compte gratuit —{' '}
+                <a href="/abonnement" className="text-signal hover:underline">
+                  passer VIP
+                </a>
+              </p>
+            )}
+          </div>
+        </section>
+
+        <section className="border border-white/10 rounded-lg p-5">
+          <h2 className="font-medium text-lg mb-4">Historique des achats</h2>
+
+          {loadingPurchases ? (
+            <p className="text-paper/50 text-sm">Chargement…</p>
+          ) : purchases.length === 0 ? (
+            <p className="text-paper/50 text-sm">Aucun achat pour le moment.</p>
+          ) : (
+            <ul className="divide-y divide-white/10">
+              {purchases.map((p) => (
+                <li key={p.id} className="py-3 flex items-center justify-between text-sm">
+                  <div>
+                    <p className="text-paper/90">{itemTypeLabels[p.item_type]}</p>
+                    <p className="text-paper/50 text-xs">
+                      {new Date(p.created_at).toLocaleDateString('fr-FR', {
+                        day: '2-digit',
+                        month: '2-digit',
+                        year: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-paper/90">{p.amount.toLocaleString('fr-FR')} FCFA</p>
+                    <p
+                      className={
+                        p.payment_status === 'paid'
+                          ? 'text-green-400 text-xs'
+                          : p.payment_status === 'failed'
+                            ? 'text-red-400 text-xs'
+                            : 'text-paper/50 text-xs'
+                      }
+                    >
+                      {statusLabels[p.payment_status]}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+      </main>
+    </div>
+  )
+}

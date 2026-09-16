@@ -7,6 +7,7 @@ import { Pronostics } from './pages/Pronostics'
 import { Montantes } from './pages/Montantes'
 import { Produits } from './pages/Produits'
 import { Abonnement } from './pages/Abonnement'
+import { Profil } from './pages/Profil'
 import { PaiementSucces } from './pages/PaiementSucces'
 import { PaiementAnnule } from './pages/PaiementAnnule'
 
@@ -24,6 +25,7 @@ export default function App() {
           <Route path="/montantes" element={<ProtectedRoute><Montantes /></ProtectedRoute>} />
           <Route path="/produits" element={<ProtectedRoute><Produits /></ProtectedRoute>} />
           <Route path="/abonnement" element={<ProtectedRoute><Abonnement /></ProtectedRoute>} />
+          <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>

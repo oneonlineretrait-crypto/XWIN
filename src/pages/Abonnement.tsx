@@ -9,7 +9,7 @@ const plans = [
 ]
 
 export function Abonnement() {
-  const profile = useProfile()
+  const { profile } = useProfile()
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
 
   async function handleSubscribe(plan: 'weekly' | 'monthly') {

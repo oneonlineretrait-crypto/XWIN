@@ -21,7 +21,7 @@ export function Pronostics() {
   const [items, setItems] = useState<Pronostic[]>([])
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
-  const profile = useProfile()
+  const { profile } = useProfile()
   const isVip = profile?.subscription_status === 'vip'
 
   useEffect(() => {
