@@ -6,7 +6,9 @@ import { Auth } from './pages/Auth'
 import { Pronostics } from './pages/Pronostics'
 import { MatchDetail } from './pages/MatchDetail'
 import { Montantes } from './pages/Montantes'
+import { MontanteDetail } from './pages/MontanteDetail'
 import { Produits } from './pages/Produits'
+import { ProduitDetail } from './pages/ProduitDetail'
 import { Abonnement } from './pages/Abonnement'
 import { Profil } from './pages/Profil'
 import { PaiementSucces } from './pages/PaiementSucces'
@@ -25,7 +27,9 @@ export default function App() {
           <Route path="/pronostics" element={<ProtectedRoute><Pronostics /></ProtectedRoute>} />
           <Route path="/pronostics/:matchId" element={<ProtectedRoute><MatchDetail /></ProtectedRoute>} />
           <Route path="/montantes" element={<ProtectedRoute><Montantes /></ProtectedRoute>} />
+          <Route path="/montantes/:montanteId" element={<ProtectedRoute><MontanteDetail /></ProtectedRoute>} />
           <Route path="/produits" element={<ProtectedRoute><Produits /></ProtectedRoute>} />
+          <Route path="/produits/:productId" element={<ProtectedRoute><ProduitDetail /></ProtectedRoute>} />
           <Route path="/abonnement" element={<ProtectedRoute><Abonnement /></ProtectedRoute>} />
           <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
         </Routes>
