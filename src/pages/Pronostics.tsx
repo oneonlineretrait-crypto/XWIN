@@ -6,21 +6,31 @@ import { supabase } from '../lib/supabase'
 import { startCheckout } from '../lib/checkout'
 import { useProfile } from '../lib/useProfile'
 
-type Pronostic = {
+type PronosticRow = {
   id: string
+  match_id: string
   sport: string
   competition: string | null
   match_teams: string
   match_date: string | null
-  pick: string
-  odds: number | null
   access_level: 'free' | 'paid'
   price: number | null
   status: 'pending' | 'won' | 'lost' | 'void'
+  pick: string | null
+  odds: number | null
+}
+
+type MatchGroup = {
+  match_id: string
+  sport: string
+  competition: string | null
+  match_teams: string
+  match_date: string | null
+  pronostics: PronosticRow[]
 }
 
 export function Pronostics() {
-  const [items, setItems] = useState<Pronostic[]>([])
+  const [items, setItems] = useState<PronosticRow[]>([])
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
   const { profile } = useProfile()
@@ -35,7 +45,7 @@ export function Pronostics() {
       .select('*')
       .order('match_date', { ascending: true })
       .then(({ data }) => {
-        setItems((data as Pronostic[]) ?? [])
+        setItems((data as PronosticRow[]) ?? [])
         setLoading(false)
       })
   }, [])
@@ -46,10 +56,26 @@ export function Pronostics() {
     return Array.from(counts.entries()).sort((a, b) => b[1] - a[1])
   }, [items])
 
-  const filtered = useMemo(
-    () => (activeSport === 'tous' ? items : items.filter((p) => p.sport === activeSport)),
-    [items, activeSport],
-  )
+  const matches = useMemo<MatchGroup[]>(() => {
+    const filtered = activeSport === 'tous' ? items : items.filter((p) => p.sport === activeSport)
+    const byMatch = new Map<string, MatchGroup>()
+    for (const p of filtered) {
+      const existing = byMatch.get(p.match_id)
+      if (existing) {
+        existing.pronostics.push(p)
+      } else {
+        byMatch.set(p.match_id, {
+          match_id: p.match_id,
+          sport: p.sport,
+          competition: p.competition,
+          match_teams: p.match_teams,
+          match_date: p.match_date,
+          pronostics: [p],
+        })
+      }
+    }
+    return Array.from(byMatch.values())
+  }, [items, activeSport])
 
   function selectSport(sport: string) {
     if (sport === 'tous') setSearchParams({})
@@ -107,43 +133,64 @@ export function Pronostics() {
         {!loading && items.length === 0 && (
           <p className="text-paper/50">Aucun pronostic pour le moment.</p>
         )}
-        {!loading && items.length > 0 && filtered.length === 0 && (
+        {!loading && items.length > 0 && matches.length === 0 && (
           <p className="text-paper/50">Aucun pronostic dans cette catégorie.</p>
         )}
 
-        <div className="space-y-4">
-          {filtered.map((p) => {
-            // Pour un pronostic payant, la ligne "pick" n'arrive du serveur que si l'accès est autorisé (RLS) —
-            // ici access_level='paid' + pick absent/masqué signifie "non débloqué".
-            const locked = p.access_level === 'paid' && !isVip && !p.pick
-            return (
-              <div key={p.id} className="border border-white/10 rounded-lg p-5">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="flex items-center gap-1.5 text-sm text-paper/50">
-                    <SportIcon sport={p.sport} className="w-4 h-4" />
-                    {p.sport} · {p.competition}
-                  </span>
-                  {p.access_level === 'paid' && (
-                    <span className="text-xs bg-signal/20 text-signal px-2 py-0.5 rounded">VIP</span>
-                  )}
+        <div className="space-y-5">
+          {matches.map((m) => (
+            <div key={m.match_id} className="border border-white/10 rounded-lg overflow-hidden">
+              <div className="px-5 py-4 bg-white/[0.03] border-b border-white/10">
+                <div className="flex items-center gap-1.5 text-sm text-paper/50 mb-1">
+                  <SportIcon sport={m.sport} className="w-4 h-4" />
+                  {m.sport} {m.competition && `· ${m.competition}`}
                 </div>
-                <p className="font-medium mb-1">{p.match_teams}</p>
-                {locked ? (
-                  <button
-                    onClick={() => handleUnlock(p.id)}
-                    disabled={payingId === p.id}
-                    className="mt-2 bg-signal text-white px-4 py-2 rounded-md text-sm hover:bg-signal/90 disabled:opacity-50"
-                  >
-                    {payingId === p.id ? 'Redirection…' : `Débloquer — ${p.price} FCFA`}
-                  </button>
-                ) : (
-                  <p className="text-paper/70">
-                    {p.pick} {p.odds && <span className="text-paper/50">(cote {p.odds})</span>}
+                <p className="font-medium">{m.match_teams}</p>
+                {m.match_date && (
+                  <p className="text-paper/40 text-xs mt-0.5">
+                    {new Date(m.match_date).toLocaleString('fr-FR', {
+                      weekday: 'short',
+                      day: '2-digit',
+                      month: '2-digit',
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </p>
                 )}
               </div>
-            )
-          })}
+
+              <div className="divide-y divide-white/5">
+                {m.pronostics.map((p) => {
+                  // Pour un pronostic payant, la ligne "pick" n'arrive du serveur que si l'accès est autorisé (RLS) —
+                  // ici access_level='paid' + pick absent/masqué signifie "non débloqué".
+                  const locked = p.access_level === 'paid' && !isVip && !p.pick
+                  return (
+                    <div key={p.id} className="px-5 py-3 flex items-center justify-between gap-3">
+                      {locked ? (
+                        <>
+                          <span className="text-sm text-paper/50">Pronostic verrouillé</span>
+                          <button
+                            onClick={() => handleUnlock(p.id)}
+                            disabled={payingId === p.id}
+                            className="shrink-0 bg-signal text-white px-3 py-1.5 rounded-md text-xs hover:bg-signal/90 disabled:opacity-50"
+                          >
+                            {payingId === p.id ? 'Redirection…' : `Débloquer — ${p.price} FCFA`}
+                          </button>
+                        </>
+                      ) : (
+                        <p className="text-sm text-paper/80">
+                          {p.pick} {p.odds && <span className="text-paper/50">(cote {p.odds})</span>}
+                        </p>
+                      )}
+                      {p.access_level === 'paid' && !locked && (
+                        <span className="shrink-0 text-xs bg-signal/20 text-signal px-2 py-0.5 rounded">VIP</span>
+                      )}
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
+          ))}
         </div>
       </main>
     </div>
