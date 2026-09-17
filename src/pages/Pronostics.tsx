@@ -18,6 +18,7 @@ type PronosticRow = {
   status: 'pending' | 'won' | 'lost' | 'void'
   pick: string | null
   odds: number | null
+  analysis: string | null
 }
 
 type MatchGroup = {
@@ -178,9 +179,14 @@ export function Pronostics() {
                           </button>
                         </>
                       ) : (
-                        <p className="text-sm text-paper/80">
-                          {p.pick} {p.odds && <span className="text-paper/50">(cote {p.odds})</span>}
-                        </p>
+                        <div className="flex-1">
+                          <p className="text-sm text-paper/80">
+                            {p.pick} {p.odds && <span className="text-paper/50">(cote {p.odds})</span>}
+                          </p>
+                          {p.analysis && (
+                            <p className="text-xs text-paper/50 mt-1 leading-relaxed">{p.analysis}</p>
+                          )}
+                        </div>
                       )}
                       {p.access_level === 'paid' && !locked && (
                         <span className="shrink-0 text-xs bg-signal/20 text-signal px-2 py-0.5 rounded">VIP</span>
