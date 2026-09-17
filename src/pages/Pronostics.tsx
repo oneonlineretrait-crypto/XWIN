@@ -34,8 +34,20 @@ export function Pronostics() {
   const [items, setItems] = useState<PronosticRow[]>([])
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
+  const [expandedMatches, setExpandedMatches] = useState<Set<string>>(new Set())
   const { profile } = useProfile()
   const isVip = profile?.subscription_status === 'vip'
+
+  const VISIBLE_LIMIT = 4
+
+  function toggleExpanded(matchId: string) {
+    setExpandedMatches((prev) => {
+      const next = new Set(prev)
+      if (next.has(matchId)) next.delete(matchId)
+      else next.add(matchId)
+      return next
+    })
+  }
 
   const [searchParams, setSearchParams] = useSearchParams()
   const activeSport = searchParams.get('sport') ?? 'tous'
@@ -161,7 +173,7 @@ export function Pronostics() {
               </div>
 
               <div className="divide-y divide-white/5">
-                {m.pronostics.map((p) => {
+                {(expandedMatches.has(m.match_id) ? m.pronostics : m.pronostics.slice(0, VISIBLE_LIMIT)).map((p) => {
                   // Pour un pronostic payant, la ligne "pick" n'arrive du serveur que si l'accès est autorisé (RLS) —
                   // ici access_level='paid' + pick absent/masqué signifie "non débloqué".
                   const locked = p.access_level === 'paid' && !isVip && !p.pick
@@ -195,6 +207,17 @@ export function Pronostics() {
                   )
                 })}
               </div>
+
+              {m.pronostics.length > VISIBLE_LIMIT && (
+                <button
+                  onClick={() => toggleExpanded(m.match_id)}
+                  className="w-full text-center text-sm text-signal py-3 border-t border-white/5 hover:bg-white/[0.03]"
+                >
+                  {expandedMatches.has(m.match_id)
+                    ? 'Réduire'
+                    : `Voir les ${m.pronostics.length} pronostics`}
+                </button>
+              )}
             </div>
           ))}
         </div>
