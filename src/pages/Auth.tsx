@@ -83,6 +83,15 @@ export function Auth() {
             <input type="password" required placeholder="Mot de passe" value={password}
               onChange={(e) => setPassword(e.target.value)} className={inputClass} />
             {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+            <p className="text-center">
+              <button
+                type="button"
+                onClick={() => navigate('/mot-de-passe-oublie')}
+                className="text-paper/50 hover:text-paper/80 text-xs underline"
+              >
+                Mot de passe oublié ?
+              </button>
+            </p>
             <button type="submit" disabled={submitting}
               className="w-full py-3.5 rounded-full bg-green-500 text-white font-medium hover:bg-green-600 transition-colors disabled:opacity-50">
               {submitting ? 'Connexion…' : 'Se Connecter'}

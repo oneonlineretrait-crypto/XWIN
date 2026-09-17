@@ -3,6 +3,8 @@ import { AuthProvider } from './lib/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { Splash } from './pages/Splash'
 import { Auth } from './pages/Auth'
+import { ForgotPassword } from './pages/ForgotPassword'
+import { ResetPassword } from './pages/ResetPassword'
 import { Pronostics } from './pages/Pronostics'
 import { MatchDetail } from './pages/MatchDetail'
 import { Montantes } from './pages/Montantes'
@@ -21,6 +23,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Splash />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
+          <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />
           <Route path="/paiement/succes" element={<PaiementSucces />} />
           <Route path="/paiement/annule" element={<PaiementAnnule />} />
 
