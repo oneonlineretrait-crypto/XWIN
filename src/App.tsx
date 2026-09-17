@@ -4,6 +4,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { Splash } from './pages/Splash'
 import { Auth } from './pages/Auth'
 import { Pronostics } from './pages/Pronostics'
+import { MatchDetail } from './pages/MatchDetail'
 import { Montantes } from './pages/Montantes'
 import { Produits } from './pages/Produits'
 import { Abonnement } from './pages/Abonnement'
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="/paiement/annule" element={<PaiementAnnule />} />
 
           <Route path="/pronostics" element={<ProtectedRoute><Pronostics /></ProtectedRoute>} />
+          <Route path="/pronostics/:matchId" element={<ProtectedRoute><MatchDetail /></ProtectedRoute>} />
           <Route path="/montantes" element={<ProtectedRoute><Montantes /></ProtectedRoute>} />
           <Route path="/produits" element={<ProtectedRoute><Produits /></ProtectedRoute>} />
           <Route path="/abonnement" element={<ProtectedRoute><Abonnement /></ProtectedRoute>} />

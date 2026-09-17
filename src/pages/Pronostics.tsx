@@ -1,10 +1,8 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { SportIcon } from '../components/SportIcon'
 import { supabase } from '../lib/supabase'
-import { startCheckout } from '../lib/checkout'
-import { useProfile } from '../lib/useProfile'
 
 type PronosticRow = {
   id: string
@@ -21,33 +19,19 @@ type PronosticRow = {
   analysis: string | null
 }
 
-type MatchGroup = {
+type MatchTile = {
   match_id: string
   sport: string
   competition: string | null
   match_teams: string
   match_date: string | null
-  pronostics: PronosticRow[]
+  total: number
+  freeCount: number
 }
 
 export function Pronostics() {
   const [items, setItems] = useState<PronosticRow[]>([])
   const [loading, setLoading] = useState(true)
-  const [payingId, setPayingId] = useState<string | null>(null)
-  const [expandedMatches, setExpandedMatches] = useState<Set<string>>(new Set())
-  const { profile } = useProfile()
-  const isVip = profile?.subscription_status === 'vip'
-
-  const VISIBLE_LIMIT = 4
-
-  function toggleExpanded(matchId: string) {
-    setExpandedMatches((prev) => {
-      const next = new Set(prev)
-      if (next.has(matchId)) next.delete(matchId)
-      else next.add(matchId)
-      return next
-    })
-  }
 
   const [searchParams, setSearchParams] = useSearchParams()
   const activeSport = searchParams.get('sport') ?? 'tous'
@@ -69,13 +53,14 @@ export function Pronostics() {
     return Array.from(counts.entries()).sort((a, b) => b[1] - a[1])
   }, [items])
 
-  const matches = useMemo<MatchGroup[]>(() => {
+  const tiles = useMemo<MatchTile[]>(() => {
     const filtered = activeSport === 'tous' ? items : items.filter((p) => p.sport === activeSport)
-    const byMatch = new Map<string, MatchGroup>()
+    const byMatch = new Map<string, MatchTile>()
     for (const p of filtered) {
       const existing = byMatch.get(p.match_id)
       if (existing) {
-        existing.pronostics.push(p)
+        existing.total += 1
+        if (p.access_level === 'free') existing.freeCount += 1
       } else {
         byMatch.set(p.match_id, {
           match_id: p.match_id,
@@ -83,7 +68,8 @@ export function Pronostics() {
           competition: p.competition,
           match_teams: p.match_teams,
           match_date: p.match_date,
-          pronostics: [p],
+          total: 1,
+          freeCount: p.access_level === 'free' ? 1 : 0,
         })
       }
     }
@@ -95,20 +81,10 @@ export function Pronostics() {
     else setSearchParams({ sport })
   }
 
-  async function handleUnlock(id: string) {
-    setPayingId(id)
-    try {
-      await startCheckout({ item_type: 'pronostic', item_id: id })
-    } catch (e) {
-      alert((e as Error).message)
-      setPayingId(null)
-    }
-  }
-
   return (
     <div className="min-h-screen">
       <NavBar />
-      <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-3xl mx-auto">
+      <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-4xl mx-auto">
         <h1 className="font-display text-3xl mb-6">Pronostics</h1>
 
         {!loading && items.length > 0 && (
@@ -146,79 +122,44 @@ export function Pronostics() {
         {!loading && items.length === 0 && (
           <p className="text-paper/50">Aucun pronostic pour le moment.</p>
         )}
-        {!loading && items.length > 0 && matches.length === 0 && (
+        {!loading && items.length > 0 && tiles.length === 0 && (
           <p className="text-paper/50">Aucun pronostic dans cette catégorie.</p>
         )}
 
-        <div className="space-y-5">
-          {matches.map((m) => (
-            <div key={m.match_id} className="border border-white/10 rounded-lg overflow-hidden">
-              <div className="px-5 py-4 bg-white/[0.03] border-b border-white/10">
-                <div className="flex items-center gap-1.5 text-sm text-paper/50 mb-1">
-                  <SportIcon sport={m.sport} className="w-4 h-4" />
-                  {m.sport} {m.competition && `· ${m.competition}`}
-                </div>
-                <p className="font-medium">{m.match_teams}</p>
-                {m.match_date && (
-                  <p className="text-paper/40 text-xs mt-0.5">
-                    {new Date(m.match_date).toLocaleString('fr-FR', {
-                      weekday: 'short',
-                      day: '2-digit',
-                      month: '2-digit',
-                      hour: '2-digit',
-                      minute: '2-digit',
-                    })}
-                  </p>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+          {tiles.map((t) => (
+            <Link
+              key={t.match_id}
+              to={`/pronostics/${t.match_id}`}
+              className="border border-white/10 rounded-lg p-4 hover:border-white/25 hover:bg-white/[0.03] transition-colors flex flex-col"
+            >
+              <div className="flex items-center gap-1.5 text-xs text-paper/50 mb-2">
+                <SportIcon sport={t.sport} className="w-3.5 h-3.5" />
+                <span className="truncate">{t.sport}</span>
+              </div>
+
+              <p className="font-medium text-sm leading-snug line-clamp-2 flex-1">{t.match_teams}</p>
+
+              {t.match_date && (
+                <p className="text-paper/40 text-xs mt-2">
+                  {new Date(t.match_date).toLocaleDateString('fr-FR', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                  })}
+                </p>
+              )}
+
+              <div className="flex items-center gap-1.5 mt-3">
+                <span className="text-xs bg-white/10 text-paper/70 px-2 py-0.5 rounded">
+                  {t.total} prono{t.total > 1 ? 's' : ''}
+                </span>
+                {t.freeCount > 0 && (
+                  <span className="text-xs bg-green-500/15 text-green-400 px-2 py-0.5 rounded">Gratuit</span>
                 )}
               </div>
-
-              <div className="divide-y divide-white/5">
-                {(expandedMatches.has(m.match_id) ? m.pronostics : m.pronostics.slice(0, VISIBLE_LIMIT)).map((p) => {
-                  // Pour un pronostic payant, la ligne "pick" n'arrive du serveur que si l'accès est autorisé (RLS) —
-                  // ici access_level='paid' + pick absent/masqué signifie "non débloqué".
-                  const locked = p.access_level === 'paid' && !isVip && !p.pick
-                  return (
-                    <div key={p.id} className="px-5 py-3 flex items-center justify-between gap-3">
-                      {locked ? (
-                        <>
-                          <span className="text-sm text-paper/50">Pronostic verrouillé</span>
-                          <button
-                            onClick={() => handleUnlock(p.id)}
-                            disabled={payingId === p.id}
-                            className="shrink-0 bg-signal text-white px-3 py-1.5 rounded-md text-xs hover:bg-signal/90 disabled:opacity-50"
-                          >
-                            {payingId === p.id ? 'Redirection…' : `Débloquer — ${p.price} FCFA`}
-                          </button>
-                        </>
-                      ) : (
-                        <div className="flex-1">
-                          <p className="text-sm text-paper/80">
-                            {p.pick} {p.odds && <span className="text-paper/50">(cote {p.odds})</span>}
-                          </p>
-                          {p.analysis && (
-                            <p className="text-xs text-paper/50 mt-1 leading-relaxed">{p.analysis}</p>
-                          )}
-                        </div>
-                      )}
-                      {p.access_level === 'paid' && !locked && (
-                        <span className="shrink-0 text-xs bg-signal/20 text-signal px-2 py-0.5 rounded">VIP</span>
-                      )}
-                    </div>
-                  )
-                })}
-              </div>
-
-              {m.pronostics.length > VISIBLE_LIMIT && (
-                <button
-                  onClick={() => toggleExpanded(m.match_id)}
-                  className="w-full text-center text-sm text-signal py-3 border-t border-white/5 hover:bg-white/[0.03]"
-                >
-                  {expandedMatches.has(m.match_id)
-                    ? 'Réduire'
-                    : `Voir les ${m.pronostics.length} pronostics`}
-                </button>
-              )}
-            </div>
+            </Link>
           ))}
         </div>
       </main>
