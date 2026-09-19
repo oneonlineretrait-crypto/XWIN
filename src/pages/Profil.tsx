@@ -76,7 +76,7 @@ export function Profil() {
       <main className="px-6 py-10 max-w-3xl mx-auto space-y-10">
         <h1 className="font-display text-3xl">Mon profil</h1>
 
-        <section className="border border-white/10 rounded-lg p-5 space-y-4">
+        <section className="border border-white/10 rounded-2xl p-5 space-y-4">
           <h2 className="font-medium text-lg">Informations du compte</h2>
 
           <div>
@@ -100,7 +100,7 @@ export function Profil() {
               <button
                 onClick={handleSave}
                 disabled={saving}
-                className="bg-signal text-white px-4 py-2 rounded-md text-sm hover:bg-signal/90 disabled:opacity-50"
+                className="bg-signal text-ink font-semibold px-4 py-2 rounded-full text-sm hover:bg-signal/90 active:scale-95 transition-all disabled:opacity-50"
               >
                 {saving ? 'Enregistrement…' : saved ? 'Enregistré ✓' : 'Enregistrer'}
               </button>
@@ -110,7 +110,7 @@ export function Profil() {
           <div>
             <label className="block text-sm text-paper/60 mb-1">Statut</label>
             {isVip ? (
-              <p className="text-signal font-medium">
+              <p className="text-gold font-medium">
                 VIP — actif jusqu'au{' '}
                 {profile?.subscription_expires_at
                   ? new Date(profile.subscription_expires_at).toLocaleDateString('fr-FR')
@@ -127,7 +127,7 @@ export function Profil() {
           </div>
         </section>
 
-        <section className="border border-white/10 rounded-lg p-5">
+        <section className="border border-white/10 rounded-2xl p-5">
           <h2 className="font-medium text-lg mb-4">Historique des achats</h2>
 
           {loadingPurchases ? (

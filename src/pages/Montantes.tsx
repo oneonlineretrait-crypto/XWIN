@@ -62,7 +62,7 @@ export function Montantes() {
               <Link
                 key={m.id}
                 to={`/montantes/${m.id}`}
-                className="block border border-white/10 rounded-lg p-5 hover:border-white/25 hover:bg-white/[0.03] transition-colors"
+                className="block border border-white/10 rounded-2xl p-5 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-signal/10 transition-all"
               >
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="font-medium text-lg">{m.title}</h2>
@@ -81,7 +81,7 @@ export function Montantes() {
                 </div>
 
                 {unlocked ? (
-                  <span className="text-signal text-sm">Voir les étapes →</span>
+                  <span className="text-signal text-sm font-medium">Voir les étapes →</span>
                 ) : (
                   <div className="flex items-center justify-between">
                     <span className="flex items-center gap-1.5 text-sm text-paper/50">
@@ -91,7 +91,7 @@ export function Montantes() {
                       </svg>
                       Verrouillée
                     </span>
-                    <span className="text-xs bg-signal/20 text-signal px-2 py-1 rounded">
+                    <span className="text-xs bg-gold text-ink font-semibold px-2.5 py-1 rounded-full">
                       {m.price} FCFA
                     </span>
                   </div>

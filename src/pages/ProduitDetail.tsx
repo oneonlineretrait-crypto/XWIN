@@ -65,17 +65,17 @@ export function ProduitDetail() {
         {product && (
           <>
             <div className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-md bg-signal/15 text-signal flex items-center justify-center shrink-0">
+              <div className="w-12 h-12 rounded-full bg-gold/15 text-gold flex items-center justify-center shrink-0">
                 <ProductIcon type={product.type} className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-xs text-paper/40 uppercase">{typeLabels[product.type]}</p>
+                <p className="text-xs text-paper/40 uppercase tracking-wide">{typeLabels[product.type]}</p>
                 <h1 className="font-display text-2xl">{product.title}</h1>
               </div>
             </div>
 
             {unlocked ? (
-              <div className="border border-white/10 rounded-lg p-6">
+              <div className="border border-white/10 rounded-2xl p-6">
                 {product.description && (
                   <p className="text-paper/70 text-sm mb-5 leading-relaxed">{product.description}</p>
                 )}
@@ -83,20 +83,20 @@ export function ProduitDetail() {
                   href={product.content_url!}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-block bg-signal text-white px-5 py-2.5 rounded-md text-sm hover:bg-signal/90"
+                  className="inline-block bg-signal text-ink font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-signal/90 active:scale-95 transition-all"
                 >
                   Accéder au contenu →
                 </a>
               </div>
             ) : (
-              <div className="border border-white/10 rounded-lg p-8 text-center">
+              <div className="border border-white/10 rounded-2xl p-8 text-center">
                 <p className="text-paper/60 text-sm mb-4">
                   Le contenu de cette {typeLabels[product.type].toLowerCase()} est réservé aux acheteurs.
                 </p>
                 <button
                   onClick={handleUnlock}
                   disabled={paying}
-                  className="bg-signal text-white px-5 py-2.5 rounded-md text-sm hover:bg-signal/90 disabled:opacity-50"
+                  className="bg-gold text-ink font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-gold/90 active:scale-95 transition-all disabled:opacity-50"
                 >
                   {paying ? 'Redirection…' : `Acheter — ${product.price} FCFA`}
                 </button>

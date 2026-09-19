@@ -32,10 +32,10 @@ const resultLabels: Record<Step['result'], string> = {
   won: 'Gagné',
   lost: 'Perdu',
 }
-const resultColors: Record<Step['result'], string> = {
-  pending: 'text-paper/50',
-  won: 'text-green-400',
-  lost: 'text-red-400',
+const resultBadgeClass: Record<Step['result'], string> = {
+  pending: 'bg-white/10 text-paper/60',
+  won: 'bg-signal text-ink',
+  lost: 'bg-alert/20 text-alert',
 }
 
 export function MontanteDetail() {
@@ -117,18 +117,18 @@ export function MontanteDetail() {
                 <button
                   onClick={handleUnlock}
                   disabled={paying}
-                  className="bg-signal text-white px-5 py-2.5 rounded-md text-sm hover:bg-signal/90 disabled:opacity-50"
+                  className="bg-gold text-ink font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-gold/90 active:scale-95 transition-all disabled:opacity-50"
                 >
                   {paying ? 'Redirection…' : `Débloquer — ${montante.price} FCFA`}
                 </button>
               </div>
             ) : (
-              <div className="border border-white/10 rounded-lg divide-y divide-white/5 overflow-hidden">
+              <div className="border border-white/10 rounded-2xl divide-y divide-white/5 overflow-hidden">
                 {steps.map((s) => (
                   <div key={s.id} className="px-5 py-4">
                     <div className="flex items-center justify-between mb-1">
                       <span className="font-medium text-sm">Étape {s.step_number}</span>
-                      <span className={`text-xs ${resultColors[s.result]}`}>{resultLabels[s.result]}</span>
+                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${resultBadgeClass[s.result]}`}>{resultLabels[s.result]}</span>
                     </div>
                     {s.pick && (
                       <p className="text-sm text-paper/80">

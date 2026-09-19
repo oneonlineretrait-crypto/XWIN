@@ -51,18 +51,18 @@ export function Produits() {
               <Link
                 key={p.id}
                 to={`/produits/${p.id}`}
-                className="border border-white/10 rounded-lg p-4 hover:border-white/25 hover:bg-white/[0.03] transition-colors flex flex-col items-start"
+                className="border border-white/10 rounded-2xl p-4 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-signal/10 transition-all flex flex-col items-start"
               >
-                <div className="w-10 h-10 rounded-md bg-signal/15 text-signal flex items-center justify-center mb-3">
+                <div className="w-10 h-10 rounded-full bg-gold/15 text-gold flex items-center justify-center mb-3">
                   <ProductIcon type={p.type} className="w-5 h-5" />
                 </div>
-                <p className="text-xs text-paper/40 uppercase mb-1">{typeLabels[p.type]}</p>
+                <p className="text-xs text-paper/40 uppercase mb-1 tracking-wide">{typeLabels[p.type]}</p>
                 <p className="font-medium text-sm leading-snug line-clamp-2 flex-1">{p.title}</p>
                 <div className="flex items-center gap-1.5 mt-3">
                   {unlocked ? (
-                    <span className="text-xs bg-green-500/15 text-green-400 px-2 py-0.5 rounded">Débloqué</span>
+                    <span className="text-xs bg-signal text-ink font-semibold px-2.5 py-1 rounded-full">Débloqué</span>
                   ) : (
-                    <span className="text-xs bg-white/10 text-paper/70 px-2 py-0.5 rounded">{p.price} FCFA</span>
+                    <span className="text-xs bg-gold text-ink font-semibold px-2.5 py-1 rounded-full">{p.price} FCFA</span>
                   )}
                 </div>
               </Link>

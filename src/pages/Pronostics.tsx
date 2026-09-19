@@ -131,7 +131,7 @@ export function Pronostics() {
             <Link
               key={t.match_id}
               to={`/pronostics/${t.match_id}`}
-              className="border border-white/10 rounded-lg p-4 hover:border-white/25 hover:bg-white/[0.03] transition-colors flex flex-col"
+              className="border border-white/10 rounded-2xl p-4 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-signal/10 transition-all flex flex-col"
             >
               <div className="flex items-center gap-1.5 text-xs text-paper/50 mb-2">
                 <SportIcon sport={t.sport} className="w-3.5 h-3.5" />
@@ -152,11 +152,11 @@ export function Pronostics() {
               )}
 
               <div className="flex items-center gap-1.5 mt-3">
-                <span className="text-xs bg-white/10 text-paper/70 px-2 py-0.5 rounded">
+                <span className="text-xs bg-white/10 text-paper/70 px-2.5 py-1 rounded-full font-medium">
                   {t.total} prono{t.total > 1 ? 's' : ''}
                 </span>
                 {t.freeCount > 0 && (
-                  <span className="text-xs bg-green-500/15 text-green-400 px-2 py-0.5 rounded">Gratuit</span>
+                  <span className="text-xs bg-signal text-ink px-2.5 py-1 rounded-full font-semibold">Gratuit</span>
                 )}
               </div>
             </Link>

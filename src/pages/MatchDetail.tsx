@@ -96,11 +96,17 @@ export function MatchDetail() {
                     <div className="flex items-center justify-between gap-3">
                       {locked ? (
                         <>
-                          <span className="text-sm text-paper/50">Pronostic verrouillé</span>
+                          <span className="flex items-center gap-1.5 text-sm text-paper/50">
+                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <rect x="4" y="10" width="16" height="10" rx="2" />
+                              <path d="M8 10V7a4 4 0 0 1 8 0v3" />
+                            </svg>
+                            Pronostic verrouillé
+                          </span>
                           <button
                             onClick={() => handleUnlock(p.id)}
                             disabled={payingId === p.id}
-                            className="shrink-0 bg-signal text-white px-3 py-1.5 rounded-md text-xs hover:bg-signal/90 disabled:opacity-50"
+                            className="shrink-0 bg-gold text-ink font-semibold px-3.5 py-1.5 rounded-full text-xs hover:bg-gold/90 active:scale-95 transition-all disabled:opacity-50"
                           >
                             {payingId === p.id ? 'Redirection…' : `Débloquer — ${p.price} FCFA`}
                           </button>
@@ -116,7 +122,7 @@ export function MatchDetail() {
                         </div>
                       )}
                       {p.access_level === 'paid' && !locked && (
-                        <span className="shrink-0 text-xs bg-signal/20 text-signal px-2 py-0.5 rounded">VIP</span>
+                        <span className="shrink-0 text-xs bg-gold text-ink font-semibold px-2.5 py-1 rounded-full">VIP</span>
                       )}
                     </div>
                   </div>
