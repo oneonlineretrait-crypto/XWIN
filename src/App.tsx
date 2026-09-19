@@ -7,6 +7,7 @@ import { ForgotPassword } from './pages/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword'
 import { Pronostics } from './pages/Pronostics'
 import { MatchDetail } from './pages/MatchDetail'
+import { Historique } from './pages/Historique'
 import { Montantes } from './pages/Montantes'
 import { MontanteDetail } from './pages/MontanteDetail'
 import { Produits } from './pages/Produits'
@@ -33,6 +34,7 @@ export default function App() {
 
           <Route path="/pronostics" element={<ProtectedRoute><Pronostics /></ProtectedRoute>} />
           <Route path="/pronostics/:matchId" element={<ProtectedRoute><MatchDetail /></ProtectedRoute>} />
+          <Route path="/historique" element={<ProtectedRoute><Historique /></ProtectedRoute>} />
           <Route path="/montantes" element={<ProtectedRoute><Montantes /></ProtectedRoute>} />
           <Route path="/montantes/:montanteId" element={<ProtectedRoute><MontanteDetail /></ProtectedRoute>} />
           <Route path="/produits" element={<ProtectedRoute><Produits /></ProtectedRoute>} />

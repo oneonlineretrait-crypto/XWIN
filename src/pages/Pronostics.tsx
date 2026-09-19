@@ -37,9 +37,12 @@ export function Pronostics() {
   const activeSport = searchParams.get('sport') ?? 'tous'
 
   useEffect(() => {
+    const startOfToday = new Date()
+    startOfToday.setHours(0, 0, 0, 0)
     supabase
       .from('pronostics_public')
       .select('*')
+      .or(`match_date.gte.${startOfToday.toISOString()},match_date.is.null`)
       .order('match_date', { ascending: true })
       .then(({ data }) => {
         setItems((data as PronosticRow[]) ?? [])
@@ -85,7 +88,12 @@ export function Pronostics() {
     <div className="min-h-screen">
       <NavBar />
       <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-4xl mx-auto">
-        <h1 className="font-display text-3xl mb-6">Pronostics</h1>
+        <div className="flex items-center justify-between mb-6">
+          <h1 className="font-display text-3xl">Pronostics</h1>
+          <Link to="/historique" className="text-paper/50 hover:text-paper/80 text-sm">
+            Historique →
+          </Link>
+        </div>
 
         {!loading && items.length > 0 && (
           <div className="flex gap-2 overflow-x-auto pb-2 mb-6 -mx-1 px-1 scrollbar-none">
