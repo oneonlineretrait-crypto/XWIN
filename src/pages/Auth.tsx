@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { LogoWordmark } from '../components/Logo'
 import { useAuth } from '../lib/AuthContext'
 
@@ -11,7 +11,8 @@ const inputClass =
 export function Auth() {
   const { signIn, signUp } = useAuth()
   const navigate = useNavigate()
-  const [tab, setTab] = useState<Tab>('login')
+  const [searchParams] = useSearchParams()
+  const [tab, setTab] = useState<Tab>(searchParams.get('tab') === 'signup' ? 'signup' : 'login')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [signupDone, setSignupDone] = useState(false)

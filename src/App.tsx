@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { AuthProvider } from './lib/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
 import { Splash } from './pages/Splash'
+import { Landing } from './pages/Landing'
 import { Auth } from './pages/Auth'
 import { ForgotPassword } from './pages/ForgotPassword'
 import { ResetPassword } from './pages/ResetPassword'
@@ -26,6 +27,7 @@ export default function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Splash />} />
+          <Route path="/accueil" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
           <Route path="/mot-de-passe-oublie" element={<ForgotPassword />} />
           <Route path="/reinitialiser-mot-de-passe" element={<ResetPassword />} />

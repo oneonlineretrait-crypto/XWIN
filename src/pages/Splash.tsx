@@ -10,7 +10,7 @@ export function Splash() {
   useEffect(() => {
     if (loading) return
     const timer = setTimeout(() => {
-      navigate(session ? '/pronostics' : '/auth', { replace: true })
+      navigate(session ? '/pronostics' : '/accueil', { replace: true })
     }, 1400)
     return () => clearTimeout(timer)
   }, [loading, session, navigate])
