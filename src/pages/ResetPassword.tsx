@@ -5,7 +5,7 @@ import { useAuth } from '../lib/AuthContext'
 import { supabase } from '../lib/supabase'
 
 const inputClass =
-  'w-full px-5 py-3.5 rounded-full bg-[#1b212c] border border-white/5 text-paper placeholder:text-paper/40 outline-none focus:border-green-500/60 transition-colors'
+  'w-full px-5 py-3.5 rounded-full bg-elevated border border-white/5 text-paper placeholder:text-muted/80 outline-none focus:border-green-500/60 transition-colors'
 
 export function ResetPassword() {
   const { updatePassword } = useAuth()
@@ -49,12 +49,12 @@ export function ResetPassword() {
 
       <div className="w-full max-w-sm mt-8">
         {!ready && !done && (
-          <p className="text-paper/50 text-sm text-center">Vérification du lien…</p>
+          <p className="text-muted text-sm text-center">Vérification du lien…</p>
         )}
 
         {ready && !done && (
           <form onSubmit={handleSubmit} className="space-y-3">
-            <p className="text-paper/60 text-sm text-center mb-4">Choisis ton nouveau mot de passe.</p>
+            <p className="text-muted text-sm text-center mb-4">Choisis ton nouveau mot de passe.</p>
             <input
               type="password"
               required
@@ -72,11 +72,11 @@ export function ResetPassword() {
               onChange={(e) => setConfirm(e.target.value)}
               className={inputClass}
             />
-            {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+            {error && <p className="text-alert text-sm text-center">{error}</p>}
             <button
               type="submit"
               disabled={submitting}
-              className="w-full py-3.5 rounded-full bg-green-500 text-white font-medium hover:bg-green-600 transition-colors disabled:opacity-50"
+              className="w-full py-3.5 rounded-full bg-signal text-ink font-medium hover:bg-signal/90 transition-colors disabled:opacity-50"
             >
               {submitting ? 'Enregistrement…' : 'Valider le nouveau mot de passe'}
             </button>

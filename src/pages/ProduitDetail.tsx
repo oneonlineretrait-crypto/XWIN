@@ -52,15 +52,15 @@ export function ProduitDetail() {
   const unlocked = product?.content_url !== null && product?.content_url !== undefined
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-2xl mx-auto">
-        <Link to="/produits" className="text-sm text-paper/50 hover:text-paper/80 mb-6 inline-block">
+        <Link to="/produits" className="text-sm text-muted hover:text-paper/80 mb-6 inline-block">
           ← Stratégies & formations
         </Link>
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
-        {!loading && !product && <p className="text-paper/50">Contenu introuvable.</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
+        {!loading && !product && <p className="text-muted">Contenu introuvable.</p>}
 
         {product && (
           <>
@@ -69,13 +69,13 @@ export function ProduitDetail() {
                 <ProductIcon type={product.type} className="w-6 h-6" />
               </div>
               <div>
-                <p className="text-xs text-paper/40 uppercase tracking-wide">{typeLabels[product.type]}</p>
+                <p className="text-xs text-muted/80 uppercase tracking-wide">{typeLabels[product.type]}</p>
                 <h1 className="font-display text-2xl">{product.title}</h1>
               </div>
             </div>
 
             {unlocked ? (
-              <div className="border border-white/10 rounded-2xl p-6">
+              <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-6">
                 {product.description && (
                   <p className="text-paper/70 text-sm mb-5 leading-relaxed">{product.description}</p>
                 )}
@@ -89,8 +89,8 @@ export function ProduitDetail() {
                 </a>
               </div>
             ) : (
-              <div className="border border-white/10 rounded-2xl p-8 text-center">
-                <p className="text-paper/60 text-sm mb-4">
+              <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-8 text-center">
+                <p className="text-muted text-sm mb-4">
                   Le contenu de cette {typeLabels[product.type].toLowerCase()} est réservé aux acheteurs.
                 </p>
                 <button

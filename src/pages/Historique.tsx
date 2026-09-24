@@ -75,27 +75,27 @@ export function Historique() {
   }, [items])
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
-      <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-4xl mx-auto">
+      <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-2">
           <h1 className="font-display text-3xl">Historique</h1>
-          <Link to="/pronostics" className="text-paper/50 hover:text-paper/80 text-sm">
+          <Link to="/pronostics" className="text-muted hover:text-paper/80 text-sm">
             ← Pronostics du jour
           </Link>
         </div>
 
         {!loading && record.rate !== null && (
-          <p className="text-paper/60 text-sm mb-6">
+          <p className="text-muted text-sm mb-6">
             Palmarès : <span className="text-signal font-medium">{record.won} gagnés</span> ·{' '}
             <span className="text-alert font-medium">{record.lost} perdus</span> ·{' '}
             <span className="text-gold font-medium">{record.rate}% de réussite</span>
           </p>
         )}
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
         {!loading && matches.length === 0 && (
-          <p className="text-paper/50">Aucun pronostic archivé pour le moment.</p>
+          <p className="text-muted">Aucun pronostic archivé pour le moment.</p>
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -103,9 +103,9 @@ export function Historique() {
             <Link
               key={t.match_id}
               to={`/pronostics/${t.match_id}`}
-              className="border border-white/10 rounded-2xl p-4 hover:border-white/25 hover:bg-white/[0.03] transition-colors flex flex-col"
+              className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-4 hover:border-white/25 hover:bg-white/[0.03] transition-colors flex flex-col"
             >
-              <div className="flex items-center gap-1.5 text-xs text-paper/50 mb-2">
+              <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
                 <SportIcon sport={t.sport} className="w-3.5 h-3.5" />
                 <span className="truncate">{t.sport}</span>
               </div>
@@ -113,7 +113,7 @@ export function Historique() {
               <p className="font-medium text-sm leading-snug line-clamp-2 flex-1">{t.match_teams}</p>
 
               {t.match_date && (
-                <p className="text-paper/40 text-xs mt-2">
+                <p className="text-muted/80 text-xs mt-2">
                   {new Date(t.match_date).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
                 </p>
               )}
@@ -126,7 +126,7 @@ export function Historique() {
                   <span className="text-xs bg-alert/20 text-alert font-semibold px-2.5 py-1 rounded-full">{t.lost} perdu{t.lost > 1 ? 's' : ''}</span>
                 )}
                 {t.won === 0 && t.lost === 0 && (
-                  <span className="text-xs bg-white/10 text-paper/60 px-2.5 py-1 rounded-full">{t.total} prono{t.total > 1 ? 's' : ''}</span>
+                  <span className="text-xs bg-white/10 text-muted px-2.5 py-1 rounded-full">{t.total} prono{t.total > 1 ? 's' : ''}</span>
                 )}
               </div>
             </Link>

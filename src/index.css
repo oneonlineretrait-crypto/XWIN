@@ -2,17 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
-html { color-scheme: dark; }
-body { @apply bg-ink text-paper font-body antialiased; }
-
-.xwin-radial-bg {
-  background: radial-gradient(circle at 50% 35%, #151b26 0%, #0a0d13 55%, #05070a 100%);
+@layer base {
+  html { color-scheme: dark; -webkit-tap-highlight-color: transparent; }
+  body {
+    @apply min-h-screen bg-ink text-paper font-body antialiased;
+    background-image: radial-gradient(900px 520px at 50% -220px, rgba(31,209,115,.13), transparent 72%), linear-gradient(180deg,#090e18 0%,#070a12 55%,#05070c 100%);
+    background-attachment: fixed;
+  }
+  h1,h2,h3 { @apply font-display tracking-normal; }
+  button,a,input { @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-signal/70 focus-visible:ring-offset-2 focus-visible:ring-offset-ink; }
+  ::selection { @apply bg-signal/30 text-paper; }
 }
 
-.scrollbar-none {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+@layer components {
+  .xwin-radial-bg { background: radial-gradient(900px 600px at 50% -10%,rgba(31,209,115,.16),transparent 70%),radial-gradient(700px 500px at 90% 20%,rgba(245,185,50,.1),transparent 70%),linear-gradient(180deg,#0a0f1b,#070a12 60%,#05070c); }
+  .xwin-page-bg { background: radial-gradient(1100px 520px at 50% -180px,rgba(31,209,115,.1),transparent 70%),#070a12; }
+  .card { @apply rounded-3xl border border-white/[.07] bg-surface/80 shadow-card backdrop-blur-sm; }
+  .panel { @apply rounded-3xl border border-white/[.07] bg-gradient-to-b from-elevated/80 to-surface/70 shadow-card; }
+  .btn { @apply inline-flex items-center justify-center gap-2 rounded-full px-5 py-3 text-sm font-bold transition-all duration-200 active:scale-[.97] disabled:pointer-events-none disabled:opacity-50; }
+  .field { @apply w-full rounded-2xl border border-white/[.08] bg-elevated/70 px-4 py-3.5 text-sm text-paper placeholder:text-muted outline-none transition focus:border-signal/60 focus:ring-4 focus:ring-signal/10; }
+  .eyebrow { @apply text-[11px] font-bold uppercase tracking-[.16em] text-muted; }
 }
-.scrollbar-none::-webkit-scrollbar {
-  display: none;
+
+@layer utilities {
+  .scrollbar-none { scrollbar-width:none; -ms-overflow-style:none; }
+  .scrollbar-none::-webkit-scrollbar { display:none; }
+  .safe-bottom { padding-bottom:calc(env(safe-area-inset-bottom,0px) + .5rem); }
 }

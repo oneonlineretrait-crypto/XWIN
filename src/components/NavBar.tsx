@@ -16,7 +16,7 @@ export function NavBar() {
   const [open, setOpen] = useState(false)
 
   return (
-    <header className="border-b border-white/10 relative z-20">
+    <header className="border-b border-white/[0.07] relative z-20">
       <div className="px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
         <NavLink to="/pronostics" className="shrink-0" onClick={() => setOpen(false)}>
           <LogoWordmark size={28} />
@@ -37,7 +37,7 @@ export function NavBar() {
 
         <button
           onClick={signOut}
-          className="hidden md:block text-sm border border-white/20 px-3 py-1.5 rounded-md hover:bg-white/5 shrink-0"
+          className="hidden md:block text-sm border border-white/20 px-3 py-1.5 rounded-2xl hover:bg-white/5 shrink-0"
         >
           Déconnexion
         </button>
@@ -63,7 +63,7 @@ export function NavBar() {
 
       {/* Menu mobile déroulant */}
       {open && (
-        <nav className="md:hidden border-t border-white/10 bg-ink flex flex-col text-sm">
+        <nav className="md:hidden border-t border-white/[0.07] bg-ink flex flex-col text-sm">
           {links.map((l) => (
             <NavLink
               key={l.to}

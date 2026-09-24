@@ -34,14 +34,14 @@ export function Produits() {
   }, [])
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-3xl mx-auto">
         <h1 className="font-display text-3xl mb-6">Stratégies & formations</h1>
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
         {!loading && products.length === 0 && (
-          <p className="text-paper/50">Aucun contenu pour le moment.</p>
+          <p className="text-muted">Aucun contenu pour le moment.</p>
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -51,12 +51,12 @@ export function Produits() {
               <Link
                 key={p.id}
                 to={`/produits/${p.id}`}
-                className="border border-white/10 rounded-2xl p-4 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-signal/10 transition-all flex flex-col items-start"
+                className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-4 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-glow transition-all flex flex-col items-start"
               >
                 <div className="w-10 h-10 rounded-full bg-gold/15 text-gold flex items-center justify-center mb-3">
                   <ProductIcon type={p.type} className="w-5 h-5" />
                 </div>
-                <p className="text-xs text-paper/40 uppercase mb-1 tracking-wide">{typeLabels[p.type]}</p>
+                <p className="text-xs text-muted/80 uppercase mb-1 tracking-wide">{typeLabels[p.type]}</p>
                 <p className="font-medium text-sm leading-snug line-clamp-2 flex-1">{p.title}</p>
                 <div className="flex items-center gap-1.5 mt-3">
                   {unlocked ? (

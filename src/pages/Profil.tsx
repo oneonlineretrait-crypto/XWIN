@@ -80,21 +80,21 @@ export function Profil() {
   const isVip = profile?.subscription_status === 'vip'
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-6 py-10 max-w-3xl mx-auto space-y-10">
         <h1 className="font-display text-3xl">Mon profil</h1>
 
-        <section className="border border-white/10 rounded-2xl p-5 space-y-4">
+        <section className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-5 space-y-4">
           <h2 className="font-medium text-lg">Informations du compte</h2>
 
           <div>
-            <label className="block text-sm text-paper/60 mb-1">Email</label>
+            <label className="block text-sm text-muted mb-1">Email</label>
             <p className="text-paper/90">{session?.user.email}</p>
           </div>
 
           <div>
-            <label htmlFor="display_name" className="block text-sm text-paper/60 mb-1">
+            <label htmlFor="display_name" className="block text-sm text-muted mb-1">
               Pseudo
             </label>
             <div className="flex gap-2">
@@ -104,7 +104,7 @@ export function Profil() {
                 value={displayName}
                 onChange={(e) => setDisplayName(e.target.value)}
                 placeholder="Ton pseudo"
-                className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm focus:outline-none focus:border-signal"
+                className="flex-1 bg-white/5 border border-white/[0.07] rounded-2xl px-3 py-2 text-sm focus:outline-none focus:border-signal"
               />
               <button
                 onClick={handleSave}
@@ -117,7 +117,7 @@ export function Profil() {
           </div>
 
           <div>
-            <label className="block text-sm text-paper/60 mb-1">Statut</label>
+            <label className="block text-sm text-muted mb-1">Statut</label>
             {isVip ? (
               <p className="text-gold font-medium">
                 VIP — actif jusqu'au{' '}
@@ -136,9 +136,9 @@ export function Profil() {
           </div>
         </section>
 
-        <section className="border border-gold/30 rounded-2xl p-5 space-y-3">
+        <section className="border border-gold/30 bg-surface/70 shadow-card rounded-2xl p-5 space-y-3">
           <h2 className="font-medium text-lg">🎁 Parraine tes amis</h2>
-          <p className="text-paper/60 text-sm">
+          <p className="text-muted text-sm">
             Pour chaque ami qui s'inscrit avec ton lien et fait son premier achat, tu reçois{' '}
             <span className="text-gold font-medium">7 jours de VIP offerts</span>.
           </p>
@@ -148,7 +148,7 @@ export function Profil() {
               <input
                 readOnly
                 value={`${window.location.origin}/auth?tab=signup&ref=${profile.referral_code}`}
-                className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-xs text-paper/70"
+                className="flex-1 bg-white/5 border border-white/[0.07] rounded-2xl px-3 py-2 text-xs text-muted"
               />
               <button
                 onClick={() => {
@@ -164,7 +164,7 @@ export function Profil() {
           )}
 
           {referralStats && (
-            <p className="text-paper/50 text-xs">
+            <p className="text-muted text-xs">
               {referralStats.total_referred} ami{referralStats.total_referred > 1 ? 's' : ''} inscrit
               {referralStats.total_referred > 1 ? 's' : ''} · {referralStats.rewarded} récompense
               {referralStats.rewarded > 1 ? 's' : ''} obtenue{referralStats.rewarded > 1 ? 's' : ''}
@@ -172,20 +172,20 @@ export function Profil() {
           )}
         </section>
 
-        <section className="border border-white/10 rounded-2xl p-5">
+        <section className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-5">
           <h2 className="font-medium text-lg mb-4">Historique des achats</h2>
 
           {loadingPurchases ? (
-            <p className="text-paper/50 text-sm">Chargement…</p>
+            <p className="text-muted text-sm">Chargement…</p>
           ) : purchases.length === 0 ? (
-            <p className="text-paper/50 text-sm">Aucun achat pour le moment.</p>
+            <p className="text-muted text-sm">Aucun achat pour le moment.</p>
           ) : (
             <ul className="divide-y divide-white/10">
               {purchases.map((p) => (
                 <li key={p.id} className="py-3 flex items-center justify-between text-sm">
                   <div>
                     <p className="text-paper/90">{itemTypeLabels[p.item_type]}</p>
-                    <p className="text-paper/50 text-xs">
+                    <p className="text-muted text-xs">
                       {new Date(p.created_at).toLocaleDateString('fr-FR', {
                         day: '2-digit',
                         month: '2-digit',
@@ -200,10 +200,10 @@ export function Profil() {
                     <p
                       className={
                         p.payment_status === 'paid'
-                          ? 'text-green-400 text-xs'
+                          ? 'text-signal text-xs'
                           : p.payment_status === 'failed'
-                            ? 'text-red-400 text-xs'
-                            : 'text-paper/50 text-xs'
+                            ? 'text-alert text-xs'
+                            : 'text-muted text-xs'
                       }
                     >
                       {statusLabels[p.payment_status]}
