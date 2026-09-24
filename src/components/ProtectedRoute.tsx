@@ -5,7 +5,7 @@ import { useAuth } from '../lib/AuthContext'
 export function ProtectedRoute({ children }: { children: ReactNode }) {
   const { session, loading } = useAuth()
   if (loading) {
-    return <div className="min-h-screen flex items-center justify-center text-paper/50">Chargement…</div>
+    return <div className="min-h-screen flex items-center justify-center text-muted">Chargement…</div>
   }
   if (!session) return <Navigate to="/auth" replace />
   return <>{children}</>

@@ -6,7 +6,7 @@ export function Conditions() {
     <div className="min-h-screen px-6 py-10 max-w-2xl mx-auto">
       <Link to="/auth" className="inline-block mb-8"><LogoWordmark size={28} /></Link>
       <h1 className="font-display text-3xl mb-2">Conditions d'utilisation</h1>
-      <p className="text-paper/40 text-sm mb-8">Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
+      <p className="text-muted/80 text-sm mb-8">Dernière mise à jour : {new Date().toLocaleDateString('fr-FR')}</p>
 
       <div className="space-y-6 text-paper/70 text-sm leading-relaxed">
         <section>
@@ -72,7 +72,7 @@ export function Conditions() {
         </section>
       </div>
 
-      <Link to="/auth" className="inline-block mt-10 text-green-500 hover:underline text-sm">
+      <Link to="/auth" className="inline-block mt-10 text-signal hover:underline text-sm">
         ← Retour
       </Link>
     </div>

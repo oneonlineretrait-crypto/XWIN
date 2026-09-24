@@ -45,14 +45,14 @@ export function Montantes() {
   }, [])
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-3xl mx-auto">
         <h1 className="font-display text-3xl mb-6">Montantes</h1>
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
         {!loading && montantes.length === 0 && (
-          <p className="text-paper/50">Aucune montante pour le moment.</p>
+          <p className="text-muted">Aucune montante pour le moment.</p>
         )}
 
         <div className="space-y-4">
@@ -62,14 +62,14 @@ export function Montantes() {
               <Link
                 key={m.id}
                 to={`/montantes/${m.id}`}
-                className="block border border-white/10 rounded-2xl p-5 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-signal/10 transition-all"
+                className="block border border-white/[0.07] rounded-2xl p-5 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-glow transition-all"
               >
                 <div className="flex items-center justify-between mb-2">
                   <h2 className="font-medium text-lg">{m.title}</h2>
-                  <span className="text-xs text-paper/50">{statusLabels[m.status]}</span>
+                  <span className="text-xs text-muted">{statusLabels[m.status]}</span>
                 </div>
 
-                {m.description && <p className="text-paper/60 text-sm mb-3">{m.description}</p>}
+                {m.description && <p className="text-muted text-sm mb-3">{m.description}</p>}
 
                 <div className="flex items-center gap-4 text-sm text-paper/70 mb-3">
                   {m.starting_bankroll != null && (
@@ -84,7 +84,7 @@ export function Montantes() {
                   <span className="text-signal text-sm font-medium">Voir les étapes →</span>
                 ) : (
                   <div className="flex items-center justify-between">
-                    <span className="flex items-center gap-1.5 text-sm text-paper/50">
+                    <span className="flex items-center gap-1.5 text-sm text-muted">
                       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <rect x="4" y="10" width="16" height="10" rx="2" />
                         <path d="M8 10V7a4 4 0 0 1 8 0v3" />

@@ -55,26 +55,26 @@ export function MatchDetail() {
   const match = items[0]
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-3xl mx-auto">
-        <Link to="/pronostics" className="text-sm text-paper/50 hover:text-paper/80 mb-6 inline-block">
+        <Link to="/pronostics" className="text-sm text-muted hover:text-paper/80 mb-6 inline-block">
           ← Tous les pronostics
         </Link>
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
-        {!loading && !match && <p className="text-paper/50">Match introuvable.</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
+        {!loading && !match && <p className="text-muted">Match introuvable.</p>}
 
         {match && (
           <>
             <div className="mb-6">
-              <div className="flex items-center gap-1.5 text-sm text-paper/50 mb-1">
+              <div className="flex items-center gap-1.5 text-sm text-muted mb-1">
                 <SportIcon sport={match.sport} className="w-4 h-4" />
                 {match.sport} {match.competition && `· ${match.competition}`}
               </div>
               <h1 className="font-display text-2xl sm:text-3xl">{match.match_teams}</h1>
               {match.match_date && (
-                <p className="text-paper/40 text-sm mt-1">
+                <p className="text-muted/80 text-sm mt-1">
                   {new Date(match.match_date).toLocaleString('fr-FR', {
                     weekday: 'long',
                     day: '2-digit',
@@ -86,7 +86,7 @@ export function MatchDetail() {
               )}
             </div>
 
-            <div className="border border-white/10 rounded-lg divide-y divide-white/5 overflow-hidden">
+            <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-3xl divide-y divide-white/5 overflow-hidden">
               {items.map((p) => {
                 // Pour un pronostic payant, la ligne "pick" n'arrive du serveur que si l'accès est autorisé (RLS) —
                 // ici access_level='paid' + pick absent/masqué signifie "non débloqué".
@@ -96,7 +96,7 @@ export function MatchDetail() {
                     <div className="flex items-center justify-between gap-3">
                       {locked ? (
                         <>
-                          <span className="flex items-center gap-1.5 text-sm text-paper/50">
+                          <span className="flex items-center gap-1.5 text-sm text-muted">
                             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                               <rect x="4" y="10" width="16" height="10" rx="2" />
                               <path d="M8 10V7a4 4 0 0 1 8 0v3" />
@@ -114,10 +114,10 @@ export function MatchDetail() {
                       ) : (
                         <div className="flex-1">
                           <p className="text-sm text-paper/80">
-                            {p.pick} {p.odds && <span className="text-paper/50">(cote {p.odds})</span>}
+                            {p.pick} {p.odds && <span className="text-muted">(cote {p.odds})</span>}
                           </p>
                           {p.analysis && (
-                            <p className="text-xs text-paper/50 mt-1 leading-relaxed">{p.analysis}</p>
+                            <p className="text-xs text-muted mt-1 leading-relaxed">{p.analysis}</p>
                           )}
                         </div>
                       )}

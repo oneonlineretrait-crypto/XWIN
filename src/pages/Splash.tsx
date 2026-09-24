@@ -18,7 +18,7 @@ export function Splash() {
   return (
     <div className="min-h-screen xwin-radial-bg flex flex-col items-center justify-center">
       <LogoWordmark size={56} />
-      <p className="mt-4 text-paper/50 text-sm">« Xwin - Votre Partenaire de Confiance »</p>
+      <p className="mt-4 text-muted text-sm">« Xwin - Votre Partenaire de Confiance »</p>
     </div>
   )
 }

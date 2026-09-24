@@ -23,14 +23,14 @@ export function Abonnement() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-6 py-10 max-w-2xl mx-auto">
         <h1 className="font-display text-3xl mb-2">Abonnement VIP</h1>
-        <p className="text-paper/60 mb-8">Accès illimité à tous les pronostics, montantes et contenus payants.</p>
+        <p className="text-muted mb-8">Accès illimité à tous les pronostics, montantes et contenus payants.</p>
 
         {profile?.subscription_status === 'vip' && (
-          <div className="mb-8 border border-signal/40 bg-signal/10 rounded-lg p-4 text-sm">
+          <div className="mb-8 border border-signal/40 bg-signal/10 rounded-3xl p-4 text-sm">
             Tu es déjà VIP
             {profile.subscription_expires_at &&
               ` jusqu'au ${new Date(profile.subscription_expires_at).toLocaleDateString('fr-FR')}`}
@@ -40,13 +40,13 @@ export function Abonnement() {
 
         <div className="grid sm:grid-cols-2 gap-4">
           {plans.map((plan) => (
-            <div key={plan.id} className="border border-white/10 rounded-lg p-6 text-center">
+            <div key={plan.id} className="border border-white/[0.07] bg-surface/70 shadow-card rounded-3xl p-6 text-center">
               <h2 className="font-display text-xl mb-2">{plan.label}</h2>
               <p className="text-3xl font-medium mb-6">{plan.price} FCFA</p>
               <button
                 onClick={() => handleSubscribe(plan.id)}
                 disabled={loadingPlan === plan.id}
-                className="w-full bg-signal text-white px-4 py-3 rounded-md hover:bg-signal/90 disabled:opacity-50"
+                className="w-full bg-signal text-ink px-4 py-3 rounded-2xl hover:bg-signal/90 disabled:opacity-50"
               >
                 {loadingPlan === plan.id ? 'Redirection…' : "S'abonner"}
               </button>

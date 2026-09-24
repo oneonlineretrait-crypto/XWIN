@@ -85,12 +85,12 @@ export function Pronostics() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
-      <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-4xl mx-auto">
+      <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-5xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <h1 className="font-display text-3xl">Pronostics</h1>
-          <Link to="/historique" className="text-paper/50 hover:text-paper/80 text-sm">
+          <Link to="/historique" className="text-muted hover:text-paper/80 text-sm">
             Historique →
           </Link>
         </div>
@@ -101,8 +101,8 @@ export function Pronostics() {
               onClick={() => selectSport('tous')}
               className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border transition-colors ${
                 activeSport === 'tous'
-                  ? 'bg-signal border-signal text-white'
-                  : 'border-white/15 text-paper/70 hover:border-white/30'
+                  ? 'bg-signal border-signal text-ink'
+                  : 'border-white/10 text-paper/70 hover:border-white/30'
               }`}
             >
               Tous
@@ -114,8 +114,8 @@ export function Pronostics() {
                 onClick={() => selectSport(sport)}
                 className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm border transition-colors ${
                   activeSport === sport
-                    ? 'bg-signal border-signal text-white'
-                    : 'border-white/15 text-paper/70 hover:border-white/30'
+                    ? 'bg-signal border-signal text-ink'
+                    : 'border-white/10 text-paper/70 hover:border-white/30'
                 }`}
               >
                 <SportIcon sport={sport} className="w-4 h-4" />
@@ -126,12 +126,12 @@ export function Pronostics() {
           </div>
         )}
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
         {!loading && items.length === 0 && (
-          <p className="text-paper/50">Aucun pronostic pour le moment.</p>
+          <p className="text-muted">Aucun pronostic pour le moment.</p>
         )}
         {!loading && items.length > 0 && tiles.length === 0 && (
-          <p className="text-paper/50">Aucun pronostic dans cette catégorie.</p>
+          <p className="text-muted">Aucun pronostic dans cette catégorie.</p>
         )}
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
@@ -139,9 +139,9 @@ export function Pronostics() {
             <Link
               key={t.match_id}
               to={`/pronostics/${t.match_id}`}
-              className="border border-white/10 rounded-2xl p-4 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-lg hover:shadow-signal/10 transition-all flex flex-col"
+              className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-4 hover:border-signal/40 hover:bg-white/[0.03] hover:-translate-y-0.5 hover:shadow-glow transition-all flex flex-col"
             >
-              <div className="flex items-center gap-1.5 text-xs text-paper/50 mb-2">
+              <div className="flex items-center gap-1.5 text-xs text-muted mb-2">
                 <SportIcon sport={t.sport} className="w-3.5 h-3.5" />
                 <span className="truncate">{t.sport}</span>
               </div>
@@ -149,7 +149,7 @@ export function Pronostics() {
               <p className="font-medium text-sm leading-snug line-clamp-2 flex-1">{t.match_teams}</p>
 
               {t.match_date && (
-                <p className="text-paper/40 text-xs mt-2">
+                <p className="text-muted/80 text-xs mt-2">
                   {new Date(t.match_date).toLocaleDateString('fr-FR', {
                     day: '2-digit',
                     month: '2-digit',

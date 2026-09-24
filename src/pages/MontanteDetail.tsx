@@ -33,7 +33,7 @@ const resultLabels: Record<Step['result'], string> = {
   lost: 'Perdu',
 }
 const resultBadgeClass: Record<Step['result'], string> = {
-  pending: 'bg-white/10 text-paper/60',
+  pending: 'bg-white/10 text-muted',
   won: 'bg-signal text-ink',
   lost: 'bg-alert/20 text-alert',
 }
@@ -79,26 +79,26 @@ export function MontanteDetail() {
     : false
 
   return (
-    <div className="min-h-screen">
+    <div className="xwin-page-bg min-h-screen">
       <NavBar />
       <main className="px-4 sm:px-6 py-8 sm:py-10 max-w-3xl mx-auto">
-        <Link to="/montantes" className="text-sm text-paper/50 hover:text-paper/80 mb-6 inline-block">
+        <Link to="/montantes" className="text-sm text-muted hover:text-paper/80 mb-6 inline-block">
           ← Toutes les montantes
         </Link>
 
-        {loading && <p className="text-paper/50">Chargement…</p>}
-        {!loading && !montante && <p className="text-paper/50">Montante introuvable.</p>}
+        {loading && <p className="text-muted">Chargement…</p>}
+        {!loading && !montante && <p className="text-muted">Montante introuvable.</p>}
 
         {montante && (
           <>
             <div className="mb-6">
               <div className="flex items-center justify-between mb-2">
                 <h1 className="font-display text-2xl sm:text-3xl">{montante.title}</h1>
-                <span className="text-xs text-paper/50 shrink-0 ml-3">
+                <span className="text-xs text-muted shrink-0 ml-3">
                   {montante.status === 'active' ? 'En cours' : montante.status === 'completed' ? 'Terminée' : 'Échouée'}
                 </span>
               </div>
-              {montante.description && <p className="text-paper/60 text-sm mb-3">{montante.description}</p>}
+              {montante.description && <p className="text-muted text-sm mb-3">{montante.description}</p>}
               <div className="flex items-center gap-4 text-sm text-paper/70">
                 {montante.starting_bankroll != null && (
                   <span>Capital : {montante.starting_bankroll.toLocaleString('fr-FR')} FCFA</span>
@@ -110,8 +110,8 @@ export function MontanteDetail() {
             </div>
 
             {!unlocked ? (
-              <div className="border border-white/10 rounded-lg p-8 text-center">
-                <p className="text-paper/60 text-sm mb-4">
+              <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-3xl p-8 text-center">
+                <p className="text-muted text-sm mb-4">
                   Les étapes de cette montante sont réservées aux acheteurs (ou aux membres VIP).
                 </p>
                 <button
@@ -123,7 +123,7 @@ export function MontanteDetail() {
                 </button>
               </div>
             ) : (
-              <div className="border border-white/10 rounded-2xl divide-y divide-white/5 overflow-hidden">
+              <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl divide-y divide-white/5 overflow-hidden">
                 {steps.map((s) => (
                   <div key={s.id} className="px-5 py-4">
                     <div className="flex items-center justify-between mb-1">
@@ -135,7 +135,7 @@ export function MontanteDetail() {
                         Miser sur : <span className="text-paper">{s.pick}</span>
                       </p>
                     )}
-                    <div className="flex items-center gap-4 mt-1 text-xs text-paper/50">
+                    <div className="flex items-center gap-4 mt-1 text-xs text-muted">
                       {s.stake != null && <span>Mise : {s.stake.toLocaleString('fr-FR')} FCFA</span>}
                       {s.odds != null && <span>Cote : {s.odds}</span>}
                       {s.bankroll_after != null && (
@@ -145,7 +145,7 @@ export function MontanteDetail() {
                   </div>
                 ))}
                 {steps.length === 0 && (
-                  <p className="px-5 py-4 text-paper/50 text-sm">Aucune étape pour le moment.</p>
+                  <p className="px-5 py-4 text-muted text-sm">Aucune étape pour le moment.</p>
                 )}
               </div>
             )}

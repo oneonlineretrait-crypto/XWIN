@@ -6,7 +6,7 @@ import { useAuth } from '../lib/AuthContext'
 type Tab = 'login' | 'signup'
 
 const inputClass =
-  'w-full px-5 py-3.5 rounded-full bg-[#1b212c] border border-white/5 text-paper placeholder:text-paper/40 outline-none focus:border-green-500/60 transition-colors'
+  'w-full px-5 py-3.5 rounded-full bg-elevated border border-white/5 text-paper placeholder:text-muted/80 outline-none focus:border-green-500/60 transition-colors'
 
 export function Auth() {
   const { signIn, signUp } = useAuth()
@@ -55,14 +55,14 @@ export function Auth() {
   return (
     <div className="min-h-screen xwin-radial-bg flex flex-col items-center justify-center px-6 py-12">
       <LogoWordmark size={40} />
-      <p className="mt-3 mb-8 text-paper/50 text-sm">Xwin - Votre partenaire de confiance</p>
+      <p className="mt-3 mb-8 text-muted text-sm">Xwin - Votre partenaire de confiance</p>
 
       <div className="w-full max-w-sm">
-        <div className="flex rounded-full bg-[#12161d] p-1 mb-6">
+        <div className="flex rounded-full bg-surface p-1 mb-6">
           <button
             onClick={() => { setTab('login'); setError(null) }}
             className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors ${
-              tab === 'login' ? 'bg-green-500 text-white' : 'text-paper/50 hover:text-paper/80'
+              tab === 'login' ? 'bg-signal text-ink' : 'text-muted hover:text-paper/80'
             }`}
           >
             Connexion
@@ -70,7 +70,7 @@ export function Auth() {
           <button
             onClick={() => { setTab('signup'); setError(null) }}
             className={`flex-1 py-2.5 rounded-full text-sm font-medium transition-colors ${
-              tab === 'signup' ? 'bg-green-500 text-white' : 'text-paper/50 hover:text-paper/80'
+              tab === 'signup' ? 'bg-signal text-ink' : 'text-muted hover:text-paper/80'
             }`}
           >
             Inscription
@@ -83,23 +83,23 @@ export function Auth() {
               onChange={(e) => setEmail(e.target.value)} className={inputClass} />
             <input type="password" required placeholder="Mot de passe" value={password}
               onChange={(e) => setPassword(e.target.value)} className={inputClass} />
-            {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+            {error && <p className="text-alert text-sm text-center">{error}</p>}
             <p className="text-center">
               <button
                 type="button"
                 onClick={() => navigate('/mot-de-passe-oublie')}
-                className="text-paper/50 hover:text-paper/80 text-xs underline"
+                className="text-muted hover:text-paper/80 text-xs underline"
               >
                 Mot de passe oublié ?
               </button>
             </p>
             <button type="submit" disabled={submitting}
-              className="w-full py-3.5 rounded-full bg-green-500 text-white font-medium hover:bg-green-600 transition-colors disabled:opacity-50">
+              className="w-full py-3.5 rounded-full bg-signal text-ink font-medium hover:bg-signal/90 transition-colors disabled:opacity-50">
               {submitting ? 'Connexion…' : 'Se Connecter'}
             </button>
-            <p className="text-center text-sm text-paper/60">
+            <p className="text-center text-sm text-muted">
               Pas encore de compte ?{' '}
-              <button type="button" onClick={() => setTab('signup')} className="text-green-500 hover:underline">
+              <button type="button" onClick={() => setTab('signup')} className="text-signal hover:underline">
                 Créer un compte
               </button>
             </p>
@@ -118,14 +118,14 @@ export function Auth() {
               onChange={(e) => setSuPassword(e.target.value)} className={inputClass} />
             <input type="password" required placeholder="Confirmer mot de passe" value={suConfirm}
               onChange={(e) => setSuConfirm(e.target.value)} className={inputClass} />
-            {error && <p className="text-red-400 text-sm text-center">{error}</p>}
+            {error && <p className="text-alert text-sm text-center">{error}</p>}
             <button type="submit" disabled={submitting}
-              className="w-full py-3.5 rounded-full bg-green-500 text-white font-medium hover:bg-green-600 transition-colors disabled:opacity-50">
+              className="w-full py-3.5 rounded-full bg-signal text-ink font-medium hover:bg-signal/90 transition-colors disabled:opacity-50">
               {submitting ? 'Création…' : "S'inscrire"}
             </button>
-            <p className="text-center text-sm text-paper/60">
+            <p className="text-center text-sm text-muted">
               Déjà un compte ?{' '}
-              <button type="button" onClick={() => setTab('login')} className="text-green-500 hover:underline">
+              <button type="button" onClick={() => setTab('login')} className="text-signal hover:underline">
                 Se connecter
               </button>
             </p>
@@ -135,7 +135,7 @@ export function Auth() {
         {tab === 'signup' && signupDone && (
           <div className="text-center py-6">
             <p className="text-paper/80 mb-4">Compte créé — vérifie ta boîte mail pour confirmer, puis connecte-toi.</p>
-            <button onClick={() => { setTab('login'); setSignupDone(false) }} className="text-green-500 hover:underline text-sm">
+            <button onClick={() => { setTab('login'); setSignupDone(false) }} className="text-signal hover:underline text-sm">
               Aller à la connexion
             </button>
           </div>
@@ -143,8 +143,8 @@ export function Auth() {
 
         <p className="mt-8 text-center text-xs text-paper/30">
           En continuant, vous acceptez les{' '}
-          <a href="/conditions" className="underline hover:text-paper/50">Conditions d'utilisation</a> et la{' '}
-          <a href="/confidentialite" className="underline hover:text-paper/50">Politique de confidentialité</a>
+          <a href="/conditions" className="underline hover:text-muted">Conditions d'utilisation</a> et la{' '}
+          <a href="/confidentialite" className="underline hover:text-muted">Politique de confidentialité</a>
         </p>
       </div>
     </div>
