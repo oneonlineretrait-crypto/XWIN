@@ -45,7 +45,7 @@ export function Conditions() {
             Certains pronostics, montantes, stratégies et formations sont accessibles contre paiement à
             l'unité, ou via un abonnement VIP (hebdomadaire ou mensuel) donnant accès à l'ensemble des
             contenus payants pendant sa durée de validité. Les paiements sont traités par un prestataire
-            tiers sécurisé (Stripe). Sauf disposition légale contraire, les achats de contenus numériques
+            tiers sécurisé (CinetPay). Sauf disposition légale contraire, les achats de contenus numériques
             déjà consultés ne sont pas remboursables.
           </p>
         </section>

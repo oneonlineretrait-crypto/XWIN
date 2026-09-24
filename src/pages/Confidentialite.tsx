@@ -15,7 +15,7 @@ export function Confidentialite() {
             Lors de la création d'un compte et de l'utilisation de XWIN, nous collectons : votre adresse
             email, un pseudo optionnel, et l'historique de vos achats et abonnements sur la plateforme. Nous
             ne collectons ni ne stockons vos données bancaires — celles-ci sont traitées directement par
-            notre prestataire de paiement (Stripe).
+            notre prestataire de paiement (CinetPay).
           </p>
         </section>
 
@@ -32,7 +32,7 @@ export function Confidentialite() {
           <h2 className="text-paper font-medium mb-2">3. Sous-traitants</h2>
           <p>
             Nous faisons appel aux prestataires suivants pour faire fonctionner le service : Supabase
-            (hébergement des données et authentification), Stripe (traitement des paiements), et nos
+            (hébergement des données et authentification), CinetPay (traitement des paiements), et nos
             hébergeurs applicatifs. Chacun applique ses propres standards de sécurité.
           </p>
         </section>
