@@ -3,6 +3,7 @@ import { NavBar } from '../components/NavBar'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
 import { supabase } from '../lib/supabase'
+import { usePushNotifications } from '../lib/usePushNotifications'
 
 type Purchase = {
   id: string
@@ -29,6 +30,7 @@ const statusLabels: Record<Purchase['payment_status'], string> = {
 export function Profil() {
   const { session } = useAuth()
   const { profile, refreshProfile } = useProfile()
+  const push = usePushNotifications()
   const [displayName, setDisplayName] = useState('')
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
@@ -134,6 +136,28 @@ export function Profil() {
               </p>
             )}
           </div>
+        </section>
+
+        <section className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-5 space-y-2">
+          <h2 className="font-medium text-lg">🔔 Notifications</h2>
+          {!push.supported ? (
+            <p className="text-muted text-sm">Non disponible sur ce navigateur/appareil.</p>
+          ) : (
+            <div className="flex items-center justify-between">
+              <p className="text-muted text-sm">
+                {push.subscribed ? 'Activées — tu reçois les nouveaux pronos.' : 'Sois prévenu dès qu\'un nouveau prono tombe.'}
+              </p>
+              <button
+                onClick={push.subscribed ? push.unsubscribe : push.subscribe}
+                disabled={push.loading}
+                className={`shrink-0 ml-3 px-4 py-2 rounded-full text-sm font-semibold transition-all active:scale-95 disabled:opacity-50 ${
+                  push.subscribed ? 'border border-white/20 text-muted hover:bg-white/5' : 'bg-signal text-ink hover:bg-signal/90'
+                }`}
+              >
+                {push.loading ? '…' : push.subscribed ? 'Désactiver' : 'Activer'}
+              </button>
+            </div>
+          )}
         </section>
 
         <section className="border border-gold/30 bg-surface/70 shadow-card rounded-2xl p-5 space-y-3">
