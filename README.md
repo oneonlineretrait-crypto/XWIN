@@ -52,3 +52,11 @@ poussée.)
   base de données, stratégie de cache serveur)
 - Remplacer les icônes placeholder dans `public/icons/`
 - Personnaliser la palette et la typographie dans `tailwind.config.js`
+
+## Paiements — CinetPay (Mobile Money + cartes, FCFA)
+
+1. Créer un compte marchand sur https://cinetpay.com et récupérer **API Key** et **Site ID**.
+2. Appliquer la migration `supabase/migrations/20260924000000_cinetpay.sql`.
+3. Secrets : `supabase secrets set CINETPAY_API_KEY=... CINETPAY_SITE_ID=... SITE_URL=https://votre-domaine`
+4. Déployer : `supabase functions deploy cinetpay-checkout` puis `supabase functions deploy cinetpay-notify --no-verify-jwt`
+5. URL de notification CinetPay : `https://<projet>.supabase.co/functions/v1/cinetpay-notify`
