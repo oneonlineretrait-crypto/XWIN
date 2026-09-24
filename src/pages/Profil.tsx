@@ -34,6 +34,8 @@ export function Profil() {
   const [saved, setSaved] = useState(false)
   const [purchases, setPurchases] = useState<Purchase[]>([])
   const [loadingPurchases, setLoadingPurchases] = useState(true)
+  const [referralStats, setReferralStats] = useState<{ total_referred: number; rewarded: number } | null>(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     if (profile?.display_name) setDisplayName(profile.display_name)
@@ -50,6 +52,13 @@ export function Profil() {
         setPurchases((data as Purchase[]) ?? [])
         setLoadingPurchases(false)
       })
+  }, [session])
+
+  useEffect(() => {
+    if (!session) return
+    supabase.rpc('referral_stats').then(({ data }) => {
+      if (data && data[0]) setReferralStats(data[0])
+    })
   }, [session])
 
   async function handleSave() {
@@ -125,6 +134,42 @@ export function Profil() {
               </p>
             )}
           </div>
+        </section>
+
+        <section className="border border-gold/30 rounded-2xl p-5 space-y-3">
+          <h2 className="font-medium text-lg">🎁 Parraine tes amis</h2>
+          <p className="text-paper/60 text-sm">
+            Pour chaque ami qui s'inscrit avec ton lien et fait son premier achat, tu reçois{' '}
+            <span className="text-gold font-medium">7 jours de VIP offerts</span>.
+          </p>
+
+          {profile?.referral_code && (
+            <div className="flex gap-2">
+              <input
+                readOnly
+                value={`${window.location.origin}/auth?tab=signup&ref=${profile.referral_code}`}
+                className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-xs text-paper/70"
+              />
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(`${window.location.origin}/auth?tab=signup&ref=${profile.referral_code}`)
+                  setCopied(true)
+                  setTimeout(() => setCopied(false), 2000)
+                }}
+                className="bg-gold text-ink font-semibold px-4 py-2 rounded-full text-sm hover:bg-gold/90 active:scale-95 transition-all shrink-0"
+              >
+                {copied ? 'Copié ✓' : 'Copier'}
+              </button>
+            </div>
+          )}
+
+          {referralStats && (
+            <p className="text-paper/50 text-xs">
+              {referralStats.total_referred} ami{referralStats.total_referred > 1 ? 's' : ''} inscrit
+              {referralStats.total_referred > 1 ? 's' : ''} · {referralStats.rewarded} récompense
+              {referralStats.rewarded > 1 ? 's' : ''} obtenue{referralStats.rewarded > 1 ? 's' : ''}
+            </p>
+          )}
         </section>
 
         <section className="border border-white/10 rounded-2xl p-5">

@@ -13,6 +13,7 @@ export function Auth() {
   const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [tab, setTab] = useState<Tab>(searchParams.get('tab') === 'signup' ? 'signup' : 'login')
+  const referralCode = searchParams.get('ref')
   const [error, setError] = useState<string | null>(null)
   const [submitting, setSubmitting] = useState(false)
   const [signupDone, setSignupDone] = useState(false)
@@ -46,7 +47,11 @@ export function Auth() {
       return
     }
     setSubmitting(true)
-    const { error } = await signUp(suEmail, suPassword, { first_name: firstName, last_name: lastName })
+    const { error } = await signUp(suEmail, suPassword, {
+      first_name: firstName,
+      last_name: lastName,
+      ...(referralCode ? { referral_code: referralCode } : {}),
+    })
     setSubmitting(false)
     if (error) return setError(error)
     setSignupDone(true)
@@ -108,6 +113,11 @@ export function Auth() {
 
         {tab === 'signup' && !signupDone && (
           <form onSubmit={handleSignup} className="space-y-3">
+            {referralCode && (
+              <p className="text-center text-xs text-signal bg-signal/10 border border-signal/30 rounded-full py-2 px-3">
+                🎁 Tu as été invité(e) sur XWIN !
+              </p>
+            )}
             <input required placeholder="Prénom" value={firstName}
               onChange={(e) => setFirstName(e.target.value)} className={inputClass} />
             <input required placeholder="Nom" value={lastName}
