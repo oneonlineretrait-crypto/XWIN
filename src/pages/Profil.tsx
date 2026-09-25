@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { NavBar } from '../components/NavBar'
 import { useAuth } from '../lib/AuthContext'
 import { useProfile } from '../lib/useProfile'
@@ -38,6 +38,28 @@ export function Profil() {
   const [loadingPurchases, setLoadingPurchases] = useState(true)
   const [referralStats, setReferralStats] = useState<{ total_referred: number; rewarded: number } | null>(null)
   const [copied, setCopied] = useState(false)
+  const [licenseCode, setLicenseCode] = useState('')
+  const [redeeming, setRedeeming] = useState(false)
+  const [licenseMessage, setLicenseMessage] = useState<{ text: string; ok: boolean } | null>(null)
+
+  async function handleRedeemLicense(e: FormEvent) {
+    e.preventDefault()
+    setRedeeming(true)
+    setLicenseMessage(null)
+    const { data, error } = await supabase.rpc('redeem_license', { p_code: licenseCode.trim() })
+    setRedeeming(false)
+    if (error) {
+      setLicenseMessage({ text: error.message, ok: false })
+      return
+    }
+    if (data === 'ok') {
+      setLicenseMessage({ text: 'Licence activée — bienvenue chez les VIP !', ok: true })
+      setLicenseCode('')
+      refreshProfile()
+    } else {
+      setLicenseMessage({ text: data as string, ok: false })
+    }
+  }
 
   useEffect(() => {
     if (profile?.display_name) setDisplayName(profile.display_name)
@@ -157,6 +179,29 @@ export function Profil() {
                 {push.loading ? '…' : push.subscribed ? 'Désactiver' : 'Activer'}
               </button>
             </div>
+          )}
+        </section>
+
+        <section className="border border-gold/30 bg-surface/70 shadow-card rounded-2xl p-5 space-y-3">
+          <h2 className="font-medium text-lg">🔑 Activer une licence</h2>
+          <p className="text-muted text-sm">Tu as reçu un code après un achat manuel ? Active-le ici.</p>
+          <form onSubmit={handleRedeemLicense} className="flex gap-2">
+            <input
+              required
+              placeholder="Code de licence"
+              value={licenseCode}
+              onChange={(e) => setLicenseCode(e.target.value.toUpperCase())}
+              className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm tracking-wider font-mono focus:outline-none focus:border-gold"
+            />
+            <button
+              disabled={redeeming}
+              className="bg-gold text-ink font-semibold px-4 py-2 rounded-full text-sm hover:bg-gold/90 active:scale-95 transition-all shrink-0 disabled:opacity-50"
+            >
+              {redeeming ? '…' : 'Activer'}
+            </button>
+          </form>
+          {licenseMessage && (
+            <p className={`text-sm ${licenseMessage.ok ? 'text-signal' : 'text-alert'}`}>{licenseMessage.text}</p>
           )}
         </section>
 

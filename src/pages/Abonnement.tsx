@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { startCheckout } from '../lib/checkout'
 import { useProfile } from '../lib/useProfile'
@@ -10,15 +11,15 @@ const plans = [
 
 export function Abonnement() {
   const { profile } = useProfile()
+  const navigate = useNavigate()
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null)
 
   async function handleSubscribe(plan: 'weekly' | 'monthly') {
     setLoadingPlan(plan)
     try {
       await startCheckout({ item_type: 'subscription', plan })
-    } catch (e) {
-      alert((e as Error).message)
-      setLoadingPlan(null)
+    } catch {
+      navigate('/paiement-indisponible')
     }
   }
 

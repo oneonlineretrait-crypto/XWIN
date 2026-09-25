@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { SportIcon } from '../components/SportIcon'
 import { supabase } from '../lib/supabase'
@@ -23,6 +23,7 @@ type PronosticRow = {
 
 export function MatchDetail() {
   const { matchId } = useParams<{ matchId: string }>()
+  const navigate = useNavigate()
   const [items, setItems] = useState<PronosticRow[]>([])
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
@@ -46,9 +47,8 @@ export function MatchDetail() {
     setPayingId(id)
     try {
       await startCheckout({ item_type: 'pronostic', item_id: id })
-    } catch (e) {
-      alert((e as Error).message)
-      setPayingId(null)
+    } catch {
+      navigate('/paiement-indisponible')
     }
   }
 

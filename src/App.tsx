@@ -14,6 +14,7 @@ import { MontanteDetail } from './pages/MontanteDetail'
 import { Produits } from './pages/Produits'
 import { ProduitDetail } from './pages/ProduitDetail'
 import { Abonnement } from './pages/Abonnement'
+import { PaiementIndisponible } from './pages/PaiementIndisponible'
 import { Profil } from './pages/Profil'
 import { Conditions } from './pages/Conditions'
 import { Confidentialite } from './pages/Confidentialite'
@@ -42,6 +43,7 @@ export default function App() {
           <Route path="/produits" element={<ProtectedRoute><Produits /></ProtectedRoute>} />
           <Route path="/produits/:productId" element={<ProtectedRoute><ProduitDetail /></ProtectedRoute>} />
           <Route path="/abonnement" element={<ProtectedRoute><Abonnement /></ProtectedRoute>} />
+          <Route path="/paiement-indisponible" element={<ProtectedRoute><PaiementIndisponible /></ProtectedRoute>} />
           <Route path="/profil" element={<ProtectedRoute><Profil /></ProtectedRoute>} />
           <Route path="/conditions" element={<Conditions />} />
           <Route path="/confidentialite" element={<Confidentialite />} />

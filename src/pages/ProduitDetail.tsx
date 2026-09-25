@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { ProductIcon } from '../components/ProductIcon'
 import { supabase } from '../lib/supabase'
@@ -21,6 +21,7 @@ const typeLabels: Record<Product['type'], string> = {
 
 export function ProduitDetail() {
   const { productId } = useParams<{ productId: string }>()
+  const navigate = useNavigate()
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [paying, setPaying] = useState(false)
@@ -43,9 +44,8 @@ export function ProduitDetail() {
     setPaying(true)
     try {
       await startCheckout({ item_type: 'product', item_id: product.id })
-    } catch (e) {
-      alert((e as Error).message)
-      setPaying(false)
+    } catch {
+      navigate('/paiement-indisponible')
     }
   }
 

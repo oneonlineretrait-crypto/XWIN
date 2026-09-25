@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { supabase } from '../lib/supabase'
 import { startCheckout } from '../lib/checkout'
@@ -40,6 +40,7 @@ const resultBadgeClass: Record<Step['result'], string> = {
 
 export function MontanteDetail() {
   const { montanteId } = useParams<{ montanteId: string }>()
+  const navigate = useNavigate()
   const [montante, setMontante] = useState<Montante | null>(null)
   const [steps, setSteps] = useState<Step[]>([])
   const [loading, setLoading] = useState(true)
@@ -68,9 +69,8 @@ export function MontanteDetail() {
     setPaying(true)
     try {
       await startCheckout({ item_type: 'montante', item_id: montante.id })
-    } catch (e) {
-      alert((e as Error).message)
-      setPaying(false)
+    } catch {
+      navigate('/paiement-indisponible')
     }
   }
 
