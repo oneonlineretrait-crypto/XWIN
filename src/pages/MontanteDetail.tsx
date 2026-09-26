@@ -11,7 +11,7 @@ type Montante = {
   description: string | null
   starting_bankroll: number | null
   target_bankroll: number | null
-  access_level: 'free' | 'paid'
+  access_level: 'free' | 'paid' | 'premium'
   price: number | null
   status: 'active' | 'completed' | 'failed'
 }
@@ -75,7 +75,9 @@ export function MontanteDetail() {
   }
 
   const unlocked = montante
-    ? montante.access_level === 'free' || isVip || steps.some((s) => s.pick !== null)
+    ? montante.access_level === 'free' ||
+      (montante.access_level === 'paid' && isVip) ||
+      steps.some((s) => s.pick !== null)
     : false
 
   return (

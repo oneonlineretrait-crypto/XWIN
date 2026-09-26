@@ -10,7 +10,7 @@ type Montante = {
   description: string | null
   starting_bankroll: number | null
   target_bankroll: number | null
-  access_level: 'free' | 'paid'
+  access_level: 'free' | 'paid' | 'premium'
   price: number | null
   status: 'active' | 'completed' | 'failed'
 }
@@ -57,7 +57,10 @@ export function Montantes() {
 
         <div className="space-y-4">
           {montantes.map((m) => {
-            const unlocked = m.access_level === 'free' || isVip || unlockedIds.has(m.id)
+            const unlocked =
+              m.access_level === 'free' ||
+              (m.access_level === 'paid' && isVip) ||
+              unlockedIds.has(m.id)
             return (
               <Link
                 key={m.id}

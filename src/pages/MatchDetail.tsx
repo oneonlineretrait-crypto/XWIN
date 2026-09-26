@@ -4,7 +4,6 @@ import { NavBar } from '../components/NavBar'
 import { SportIcon } from '../components/SportIcon'
 import { supabase } from '../lib/supabase'
 import { startCheckout } from '../lib/checkout'
-import { useProfile } from '../lib/useProfile'
 
 type PronosticRow = {
   id: string
@@ -13,7 +12,7 @@ type PronosticRow = {
   competition: string | null
   match_teams: string
   match_date: string | null
-  access_level: 'free' | 'paid'
+  access_level: 'free' | 'paid' | 'premium'
   price: number | null
   status: 'pending' | 'won' | 'lost' | 'void'
   pick: string | null
@@ -27,8 +26,6 @@ export function MatchDetail() {
   const [items, setItems] = useState<PronosticRow[]>([])
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
-  const { profile } = useProfile()
-  const isVip = profile?.subscription_status === 'vip'
 
   useEffect(() => {
     if (!matchId) return
@@ -88,9 +85,9 @@ export function MatchDetail() {
 
             <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-3xl divide-y divide-white/5 overflow-hidden">
               {items.map((p) => {
-                // Pour un pronostic payant, la ligne "pick" n'arrive du serveur que si l'accès est autorisé (RLS) —
-                // ici access_level='paid' + pick absent/masqué signifie "non débloqué".
-                const locked = p.access_level === 'paid' && !isVip && !p.pick
+                // La ligne "pick" n'arrive du serveur que si l'accès est réellement autorisé (RLS) —
+                // absent = non débloqué. Le VIP ne lève ce verrou que pour 'paid', jamais pour 'premium'.
+                const locked = p.access_level !== 'free' && !p.pick
                 return (
                   <div key={p.id} className="px-5 py-4">
                     <div className="flex items-center justify-between gap-3">
@@ -121,8 +118,10 @@ export function MatchDetail() {
                           )}
                         </div>
                       )}
-                      {p.access_level === 'paid' && !locked && (
-                        <span className="shrink-0 text-xs bg-gold text-ink font-semibold px-2.5 py-1 rounded-full">VIP</span>
+                      {p.access_level !== 'free' && !locked && (
+                        <span className="shrink-0 text-xs bg-gold text-ink font-semibold px-2.5 py-1 rounded-full">
+                          {p.access_level === 'premium' ? 'Premium' : 'VIP'}
+                        </span>
                       )}
                     </div>
                   </div>
