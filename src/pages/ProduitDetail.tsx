@@ -2,8 +2,10 @@ import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { ProductIcon } from '../components/ProductIcon'
+import { ProtectedViewer } from '../components/ProtectedViewer'
 import { supabase } from '../lib/supabase'
 import { startCheckout } from '../lib/checkout'
+import { useProfile } from '../lib/useProfile'
 
 type Product = {
   id: string
@@ -12,6 +14,8 @@ type Product = {
   price: number
   description: string | null
   content_url: string | null
+  content_path: string | null
+  content_type: 'pdf' | 'video' | null
 }
 
 const typeLabels: Record<Product['type'], string> = {
@@ -25,6 +29,7 @@ export function ProduitDetail() {
   const [product, setProduct] = useState<Product | null>(null)
   const [loading, setLoading] = useState(true)
   const [paying, setPaying] = useState(false)
+  const { profile } = useProfile()
 
   useEffect(() => {
     if (!productId) return
@@ -49,7 +54,7 @@ export function ProduitDetail() {
     }
   }
 
-  const unlocked = product?.content_url !== null && product?.content_url !== undefined
+  const unlocked = product?.content_url != null || product?.content_path != null
 
   return (
     <div className="xwin-page-bg min-h-screen">
@@ -79,14 +84,22 @@ export function ProduitDetail() {
                 {product.description && (
                   <p className="text-paper/70 text-sm mb-5 leading-relaxed">{product.description}</p>
                 )}
-                <a
-                  href={product.content_url!}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="inline-block bg-signal text-ink font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-signal/90 active:scale-95 transition-all"
-                >
-                  Accéder au contenu →
-                </a>
+                {product.content_path ? (
+                  <ProtectedViewer
+                    productId={product.id}
+                    contentType={product.content_type}
+                    watermark={profile?.public_id ? `${profile.public_id}` : 'XWIN'}
+                  />
+                ) : (
+                  <a
+                    href={product.content_url!}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="inline-block bg-signal text-ink font-semibold px-5 py-2.5 rounded-full text-sm hover:bg-signal/90 active:scale-95 transition-all"
+                  >
+                    Accéder au contenu →
+                  </a>
+                )}
               </div>
             ) : (
               <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl p-8 text-center">
