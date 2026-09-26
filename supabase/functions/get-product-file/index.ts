@@ -42,7 +42,7 @@ Deno.serve(async (req) => {
       .eq('user_id', u.user.id)
       .eq('item_type', 'product')
       .eq('item_id', productId)
-      .eq('payment_status', 'completed')
+      .eq('payment_status', 'paid')
       .maybeSingle()
     entitled = !!purchase
   }

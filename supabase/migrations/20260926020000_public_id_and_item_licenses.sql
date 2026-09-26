@@ -81,7 +81,7 @@ begin
       where id = auth.uid();
   else
     insert into public.purchases (user_id, item_type, item_id, amount, payment_status, provider, paid_at)
-    values (auth.uid(), v_license.item_type, v_license.item_id, 0, 'completed', 'license', now());
+    values (auth.uid(), v_license.item_type, v_license.item_id, 0, 'paid', 'license', now());
   end if;
 
   update public.licenses
