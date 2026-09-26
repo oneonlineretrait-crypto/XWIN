@@ -24,5 +24,15 @@ Deno.serve(async (req) => {
   const { data, error } = await admin.auth.admin.listUsers({ perPage: 1000 })
   if (error) return json({ error: error.message }, 500)
 
-  return json({ users: data.users.map((usr) => ({ id: usr.id, email: usr.email })) })
+  const ids = data.users.map((usr) => usr.id)
+  const { data: profiles } = await admin.from('profiles').select('id, public_id').in('id', ids)
+  const publicIdById = new Map((profiles ?? []).map((p) => [p.id, p.public_id as string]))
+
+  return json({
+    users: data.users.map((usr) => ({
+      id: usr.id,
+      email: usr.email,
+      public_id: publicIdById.get(usr.id) ?? null,
+    })),
+  })
 })

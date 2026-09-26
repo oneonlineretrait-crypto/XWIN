@@ -141,6 +141,12 @@ export function Profil() {
           </div>
 
           <div>
+            <label className="block text-sm text-muted mb-1">Identifiant du compte</label>
+            <p className="text-paper/90 font-mono tracking-wider">{profile?.public_id ?? '—'}</p>
+            <p className="text-xs text-muted/70 mt-0.5">Donne cet identifiant pour qu'on te génère une licence.</p>
+          </div>
+
+          <div>
             <label className="block text-sm text-muted mb-1">Statut</label>
             {isVip ? (
               <p className="text-gold font-medium">

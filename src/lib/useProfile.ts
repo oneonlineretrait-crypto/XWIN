@@ -8,6 +8,7 @@ type Profile = {
   subscription_status: 'free' | 'vip'
   subscription_expires_at: string | null
   referral_code: string
+  public_id: string
 }
 
 export function useProfile() {
@@ -18,7 +19,7 @@ export function useProfile() {
     if (!session) return
     supabase
       .from('profiles')
-      .select('id, display_name, subscription_status, subscription_expires_at, referral_code')
+      .select('id, display_name, subscription_status, subscription_expires_at, referral_code, public_id')
       .eq('id', session.user.id)
       .single()
       .then(({ data }) => setProfile(data))
