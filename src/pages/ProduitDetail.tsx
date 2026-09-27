@@ -3,6 +3,7 @@ import { Link, useParams, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { ProductIcon } from '../components/ProductIcon'
 import { ProtectedViewer } from '../components/ProtectedViewer'
+import { LicenseRedeemBox } from '../components/LicenseRedeemBox'
 import { supabase } from '../lib/supabase'
 import { startCheckout } from '../lib/checkout'
 import { useProfile } from '../lib/useProfile'
@@ -31,7 +32,7 @@ export function ProduitDetail() {
   const [paying, setPaying] = useState(false)
   const { profile } = useProfile()
 
-  useEffect(() => {
+  function load() {
     if (!productId) return
     supabase
       .from('products_public')
@@ -42,6 +43,10 @@ export function ProduitDetail() {
         setProduct((data as Product) ?? null)
         setLoading(false)
       })
+  }
+
+  useEffect(() => {
+    load()
   }, [productId])
 
   async function handleUnlock() {
@@ -113,6 +118,10 @@ export function ProduitDetail() {
                 >
                   {paying ? 'Redirection…' : `Acheter — ${product.price} FCFA`}
                 </button>
+                <div className="mt-5 pt-5 border-t border-white/10 text-left">
+                  <p className="text-xs text-muted mb-2">Tu as un code de licence pour ce produit ?</p>
+                  <LicenseRedeemBox itemType="product" itemId={product.id} onUnlocked={load} />
+                </div>
               </div>
             )}
           </>

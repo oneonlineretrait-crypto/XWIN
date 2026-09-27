@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useParams, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
+import { LicenseRedeemBox } from '../components/LicenseRedeemBox'
 import { supabase } from '../lib/supabase'
 import { startCheckout } from '../lib/checkout'
 import { useProfile } from '../lib/useProfile'
@@ -48,7 +49,7 @@ export function MontanteDetail() {
   const { profile } = useProfile()
   const isVip = profile?.subscription_status === 'vip'
 
-  useEffect(() => {
+  function load() {
     if (!montanteId) return
     Promise.all([
       supabase.from('montantes').select('*').eq('id', montanteId).single(),
@@ -62,6 +63,10 @@ export function MontanteDetail() {
       setSteps((s as Step[]) ?? [])
       setLoading(false)
     })
+  }
+
+  useEffect(() => {
+    load()
   }, [montanteId])
 
   async function handleUnlock() {
@@ -123,6 +128,10 @@ export function MontanteDetail() {
                 >
                   {paying ? 'Redirection…' : `Débloquer — ${montante.price} FCFA`}
                 </button>
+                <div className="mt-5 pt-5 border-t border-white/10 text-left">
+                  <p className="text-xs text-muted mb-2">Tu as un code de licence pour cette montante ?</p>
+                  <LicenseRedeemBox itemType="montante" itemId={montante.id} onUnlocked={load} />
+                </div>
               </div>
             ) : (
               <div className="border border-white/[0.07] bg-surface/70 shadow-card rounded-2xl divide-y divide-white/5 overflow-hidden">

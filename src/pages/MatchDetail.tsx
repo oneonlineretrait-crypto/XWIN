@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { NavBar } from '../components/NavBar'
 import { SportIcon } from '../components/SportIcon'
@@ -26,8 +26,11 @@ export function MatchDetail() {
   const [items, setItems] = useState<PronosticRow[]>([])
   const [loading, setLoading] = useState(true)
   const [payingId, setPayingId] = useState<string | null>(null)
+  const [code, setCode] = useState('')
+  const [redeeming, setRedeeming] = useState(false)
+  const [licenseMsg, setLicenseMsg] = useState<{ text: string; ok: boolean } | null>(null)
 
-  useEffect(() => {
+  function load() {
     if (!matchId) return
     supabase
       .from('pronostics_public')
@@ -38,7 +41,40 @@ export function MatchDetail() {
         setItems((data as PronosticRow[]) ?? [])
         setLoading(false)
       })
+  }
+
+  useEffect(() => {
+    load()
   }, [matchId])
+
+  async function handleRedeem(e: FormEvent) {
+    e.preventDefault()
+    setRedeeming(true)
+    setLicenseMsg(null)
+    const { data, error } = await supabase.rpc('redeem_license', { p_code: code.trim() })
+    setRedeeming(false)
+    if (error) {
+      setLicenseMsg({ text: error.message, ok: false })
+      return
+    }
+    const result = data as string
+    if (!result.startsWith('ok:')) {
+      setLicenseMsg({ text: result, ok: false })
+      return
+    }
+    const parts = result.split(':')
+    const matches = parts[1] === 'item' && parts[2] === 'pronostic' && items.some((p) => p.id === parts[3])
+    setLicenseMsg({
+      text: matches
+        ? 'Débloqué ! Le pronostic concerné apparaît ci-dessous.'
+        : parts[1] === 'vip'
+          ? 'Compte passé VIP.'
+          : 'Code activé, mais pour un contenu situé ailleurs sur le site.',
+      ok: true,
+    })
+    setCode('')
+    load()
+  }
 
   async function handleUnlock(id: string) {
     setPayingId(id)
@@ -127,6 +163,28 @@ export function MatchDetail() {
                   </div>
                 )
               })}
+            </div>
+
+            <div className="mt-6 border border-white/[0.07] bg-surface/70 rounded-2xl p-5">
+              <p className="text-xs text-muted mb-2">Un code de licence pour un pronostic de ce match ?</p>
+              <form onSubmit={handleRedeem} className="flex gap-2">
+                <input
+                  required
+                  placeholder="Code de licence"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value.toUpperCase())}
+                  className="flex-1 bg-white/5 border border-white/10 rounded-md px-3 py-2 text-sm tracking-wider font-mono focus:outline-none focus:border-gold"
+                />
+                <button
+                  disabled={redeeming}
+                  className="bg-gold text-ink font-semibold px-4 py-2 rounded-md text-sm hover:opacity-90 disabled:opacity-50"
+                >
+                  {redeeming ? '…' : 'Activer'}
+                </button>
+              </form>
+              {licenseMsg && (
+                <p className={`text-xs mt-2 ${licenseMsg.ok ? 'text-signal' : 'text-alert'}`}>{licenseMsg.text}</p>
+              )}
             </div>
           </>
         )}

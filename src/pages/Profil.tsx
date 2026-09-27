@@ -52,12 +52,21 @@ export function Profil() {
       setLicenseMessage({ text: error.message, ok: false })
       return
     }
-    if (data === 'ok') {
+    const result = data as string
+    if (result.startsWith('ok:vip:')) {
       setLicenseMessage({ text: 'Licence activée — bienvenue chez les VIP !', ok: true })
       setLicenseCode('')
       refreshProfile()
+    } else if (result.startsWith('ok:item:')) {
+      const [, , itemType] = result.split(':')
+      const labels: Record<string, string> = { product: 'un produit', montante: 'une montante', pronostic: 'un pronostic' }
+      setLicenseMessage({
+        text: `Code activé pour ${labels[itemType] ?? 'un contenu'} — va sur sa page pour y accéder.`,
+        ok: true,
+      })
+      setLicenseCode('')
     } else {
-      setLicenseMessage({ text: data as string, ok: false })
+      setLicenseMessage({ text: result, ok: false })
     }
   }
 
